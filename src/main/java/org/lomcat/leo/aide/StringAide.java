@@ -19,11 +19,14 @@
 
 package org.lomcat.leo.aide;
 
+import java.text.Normalizer;
+import java.util.regex.Pattern;
+
 /**
  * TODO Kweny StringAide
  *
  * @author Kweny
- * @since 2018-09-01 0:06
+ * @since 1.0.0
  */
 public class StringAide extends CharSequenceAide {
 
@@ -36,22 +39,428 @@ public class StringAide extends CharSequenceAide {
 //    public static final String UNDERSCORE = "_";
 
 
+
+    // ----- Trim string ----- begin
+    // ---------------------------------------------------------------------------------------------------
+    /**
+     * <p>从字符串的首尾两端移除控制字符（char <= 32），即 {@link String#trim()}。当字符串为 null 时返回 {@code null}。</p>
+     *
+     * @param string 源字符串，可以为 null
+     * @return 修剪后的字符串
+     * @since 1.0.0
+     */
     public static String trim(final String string) {
         return string == null ? null : string.trim();
     }
 
+    /**
+     * <p>从字符串的首尾两端移除控制字符（char <= 32），即 {@link String#trim()}。
+     * 当结果为 null 或 空串时，返回 {@code null}。</p>
+     *
+     * @param string 源字符串，可以为 null
+     * @return 修剪后的字符串，或 {@code null}
+     * @since 1.0.0
+     */
     public static String trimToNull(final String string) {
         final String ts = trim(string);
         return isEmpty(ts) ? null : ts;
     }
 
+    /**
+     * <p>从字符串的首尾两端移除控制字符（char <= 32），即 {@link String#trim()}。
+     * 当结果为 null 或 空串时，返回 空串</p>
+     *
+     * @param string 源字符串，可以为 null
+     * @return 修剪后的字符串，或 空串
+     * @since 1.0.0
+     */
     public static String trimToEmpty(final String string) {
         return string == null ? EMPTY : string.trim();
     }
+    // ---------------------------------------------------------------------------------------------------
+    // ----- Trim string ----- end
 
-    // TODO 去除字符串中的所有空白字符（不止是首尾的） trims/trimsToNull/trimsToEmpty
+    // ----- Strip string ----- begin
+    // ---------------------------------------------------------------------------------------------------
+    /**
+     * <p>从字符串的开头剥离指定的一组字符。</p>
+     *
+     * <p>注意：</p>
+     * <ul>
+     *     <li>当 {@code string} 为 null 时返回 {@code null}，空串时返回空串。</li>
+     *     <li>当 {@code stripChars} 为 null 时，则按 {@link Character#isWhitespace(char)} 的定义来剥离空白符。</li>
+     *     <li>当 {@code stripChars} 为空串时，直接返回源字符串 {@code string}。</li>
+     * </ul>
+     *
+     * <pre>
+     * StringAide.stripLeft(null, *)          = null
+     * StringAide.stripLeft("", *)            = ""
+     * StringAide.stripLeft("abc", "")        = "abc"
+     * StringAide.stripLeft("  abc", "")      = "  abc"
+     * StringAide.stripLeft("abc", null)      = "abc"
+     * StringAide.stripLeft("  abc", null)    = "abc"
+     * StringAide.stripLeft("abc  ", null)    = "abc  "
+     * StringAide.stripLeft(" abc ", null)    = "abc "
+     * StringAide.stripLeft("yxabc  ", "xyz") = "abc  "
+     * StringAide.stripLeft("yxabyc", "xyz")  = "abyc"
+     * StringAide.stripLeft("  yxabc", "xyz") = "  yxabc"
+     * </pre>
+     *
+     * @param string 源字符串，可以为 null
+     * @param stripChars 要剥离的字符集，null 作为 {@link Character#isWhitespace(char)} 定义的空白符处理
+     * @return 剥离指定字符后的字符串
+     * @since 1.0.0
+     */
+    public static String stripLeft(final String string, final String stripChars) {
+        int stringLength;
+        if (string == null || (stringLength = string.length()) == 0) {
+            return string;
+        }
+        int begin = 0;
+        if (stripChars == null) {
+            while (begin != stringLength && Character.isWhitespace(string.charAt(begin))) {
+                begin++;
+            }
+        } else if (stripChars.isEmpty()) {
+            return string;
+        } else {
+            while (begin != stringLength && stripChars.indexOf(string.charAt(begin)) != INDEX_NOT_FOUND) {
+                begin++;
+            }
+        }
+        return string.substring(begin);
+    }
 
-    // 从指定位置开始截取指定长度的字符串
+    /**
+     * <p>从字符串的末尾剥离指定的一组字符。</p>
+     *
+     * <p>注意：</p>
+     * <ul>
+     *     <li>当 {@code string} 为 null 时返回 {@code null}，空串时返回空串。</li>
+     *     <li>当 {@code stripChars} 为 null 时，则按 {@link Character#isWhitespace(char)} 的定义来剥离空白符。</li>
+     *     <li>当 {@code stripChars} 为空串时，直接返回源字符串 {@code string}。</li>
+     * </ul>
+     *
+     * <pre>
+     * StringAide.stripRight(null, *)          = null
+     * StringAide.stripRight("", *)            = ""
+     * StringAide.stripRight("abc", "")        = "abc"
+     * StringAide.stripRight("abc  ", "")      = "abc  "
+     * StringAide.stripRight("abc", null)      = "abc"
+     * StringAide.stripRight("  abc", null)    = "  abc"
+     * StringAide.stripRight("abc  ", null)    = "abc"
+     * StringAide.stripRight(" abc ", null)    = " abc"
+     * StringAide.stripRight("  abcyx", "xyz") = "  abc"
+     * StringAide.stripRight("120.00", ".0")   = "12"
+     * StringAide.stripRight("axbcyx", "xyz")  = "axbc"
+     * StringAide.stripRight("abcyx  ", "xyz") = "abcyx  "
+     * </pre>
+     *
+     * @param string 源字符串，可以为 null
+     * @param stripChars 要剥离的字符集，null 作为 {@link Character#isWhitespace(char)} 定义的空白符处理
+     * @return 剥离指定字符后的字符串
+     * @since 1.0.0
+     */
+    public static String stripRight(final String string, final String stripChars) {
+        int end;
+        if (string == null || (end = string.length()) == 0) {
+            return string;
+        }
+        if (stripChars == null) {
+            while (end != 0 && Character.isWhitespace(string.charAt(end - 1))) {
+                end--;
+            }
+        } else if (stripChars.isEmpty()) {
+            return string;
+        } else {
+            while (end != 0 && stripChars.indexOf(string.charAt(end - 1)) != INDEX_NOT_FOUND) {
+                end--;
+            }
+        }
+        return string.substring(0, end);
+    }
+
+    /**
+     * <p>从字符串的开头和末尾剥离掉指定的一组字符。类似 {@link String#trim()}，但可以指定要剥离的字符。</p>
+     *
+     * <p>注意：</p>
+     * <ul>
+     *     <li>当 {@code string} 为 null 时返回 {@code null}，空串时返回空串。</li>
+     *     <li>当 {@code stripChars} 为 null 时，则按 {@link Character#isWhitespace(char)} 的定义来剥离空白符。</li>
+     *     <li>当 {@code stripChars} 为空串时，直接返回源字符串 {@code string}。</li>
+     * </ul>
+     *
+     * <pre>
+     * StringAide.strip(null, *)          = null
+     * StringAide.strip("", *)            = ""
+     * StringAide.strip("  abc  ", "")    = "  abc  "
+     * StringAide.strip("abc", null)      = "abc"
+     * StringAide.strip("  abc", null)    = "abc"
+     * StringAide.strip("abc  ", null)    = "abc"
+     * StringAide.strip(" abc ", null)    = "abc"
+     * StringAide.strip("  abcyx", "xyz") = "  abc"
+     * StringAide.strip("yxabyczxy", "xyz") = "abyc"
+     * StringAide.strip("  yxabyczxy  ", "xyz") = "  yxabyczxy  "
+     * </pre>
+     *
+     * @param string 源字符串，可以为 null
+     * @param stripChars 要剥离的字符集，null 作为 {@link Character#isWhitespace(char)} 定义的空白符处理
+     * @return 剥离指定字符后的字符串
+     * @since 1.0.0
+     */
+    public static String strip(final String string, final String stripChars) {
+        if (isEmpty(string)) {
+            return string;
+        }
+        return stripRight(stripLeft(string, stripChars), stripChars);
+    }
+
+    /**
+     * <p>从字符串的开头和末尾剥离空白符。类似 {@link String#trim()}，
+     * 但剥离的是按 {@link Character#isWhitespace(char)} 定义的空白符。</p>
+     *
+     * <pre>
+     * StringAide.strip(null)     = null
+     * StringAide.strip("")       = ""
+     * StringAide.strip("   ")    = ""
+     * StringAide.strip("abc")    = "abc"
+     * StringAide.strip("  abc")  = "abc"
+     * StringAide.strip("abc  ")  = "abc"
+     * StringAide.strip(" abc ")  = "abc"
+     * StringAide.strip(" ab c ") = "ab c"
+     * </pre>
+     *
+     * @param string 源字符串，可以为 null
+     * @return 剥离空白符之后的字符串
+     * @since 1.0.0
+     */
+    public static String strip(final String string) {
+        return strip(string, null);
+    }
+
+    /**
+     * <p>去掉字符串开头和末尾的空白符。类似 {@link String#trim()}，
+     * 但去掉的是按 {@link Character#isWhitespace(char)} 定义的空白符。</p>
+     *
+     * <p>当结果为 null 或 空串 时，返回 {@code null}。</p>
+     *
+     * @param string 源字符串，可以为 null
+     * @return 去掉首尾空白符之后的字符串，或 {@code null}
+     * @since 1.0.0
+     */
+    public static String stripToNull(String string) {
+        if (isEmpty(string)) {
+            return null;
+        }
+        string = strip(string);
+        return string.isEmpty() ? null : string;
+    }
+
+    /**
+     * <p>去掉字符串开头和末尾的空白符。类似 {@link String#trim()}，
+     * 但去掉的是按 {@link Character#isWhitespace(char)} 定义的空白符。</p>
+     *
+     * <p>当结果为 null 或 空串 时，返回 空串。</p>
+     *
+     * @param string 源字符串，可以为 null
+     * @return 去掉首尾空白符之后的字符串，或 空串
+     * @since 1.0.0
+     */
+    public static String stripToEmpty(String string) {
+        return string == null ? EMPTY : strip(string, null);
+    }
+
+    /**
+     * <p>删除字符串中的变音符号，如 '&agrave;' 替换为 'a'。</p>
+     *
+     * <pre>
+     * StringAide.stripAccents(null)                = null
+     * StringAide.stripAccents("")                  = ""
+     * StringAide.stripAccents("control")           = "control"
+     * StringAide.stripAccents("&eacute;clair")     = "eclair"
+     * </pre>
+     *
+     * @param string 源字符串
+     * @return 删除了变音符号的字符串
+     * @since 1.0.0
+     */
+    public static String stripAccents(final String string) {
+        if (string == null) {
+            return null;
+        }
+        final Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
+        final StringBuilder decomposed = new StringBuilder(Normalizer.normalize(string, Normalizer.Form.NFD));
+        convertRemainingAccentCharacters(decomposed);
+        return pattern.matcher(decomposed).replaceAll(EMPTY);
+    }
+
+    private static void convertRemainingAccentCharacters(final StringBuilder decomposed) {
+        for (int i = 0; i < decomposed.length(); i++) {
+            if (decomposed.charAt(i) == '\u0141') {
+                decomposed.deleteCharAt(i);
+                decomposed.insert(i, 'L');
+            } else if (decomposed.charAt(i) == '\u0142') {
+                decomposed.deleteCharAt(i);
+                decomposed.insert(i, 'l');
+            }
+        }
+    }
+    // ---------------------------------------------------------------------------------------------------
+    // ----- Strip string ----- end
+
+    // ----- Cull string ----- begin
+    // ---------------------------------------------------------------------------------------------------
+    /**
+     * <p>从字符串中剔除指定的一组字符。</p>
+     *
+     * <p>注意：</p>
+     * <ul>
+     *     <li>当 {@code string} 为 null 时返回 {@code null}，空串时返回空串。</li>
+     *     <li>当 {@code cullChars} 为 null 时，则按 {@link Character#isWhitespace(char) 的定义来剔除空白符。</li>
+     *     <li>当 {@code cullChars} 为空串时，直接返回源字符串 {@code string}。</li>
+     * </ul>
+     *
+     * <pre>
+     * StringAide.cull(null, *)               = null
+     * StringAide.cull("", *)                 = ""
+     * StringAide.cull("  ab c", "")          = "  ab c"
+     * StringAide.cull("abxcxdexfg  ", "xde") = "abcfg  "
+     * StringAide.cull("abc", null)           = "abc"
+     * StringAide.cull("  ab c  ", null)      = "abc"
+     * </pre>
+     *
+     * @param string 源字符串，可以为 null
+     * @param cullChars 要剔除的字符集，null 作为 {@link Character#isWhitespace(char) 定义的空白符处理
+     * @return 剔除指定字符后的字符串
+     * @since 1.0.0
+     */
+    public static String cull(final String string, final String cullChars) {
+        int length;
+        if (string == null || (length = string.length()) == 0) {
+            return string;
+        }
+        if (cullChars == null) {
+            StringBuilder builder = new StringBuilder();
+            for (int i = 0; i < length; i++) {
+                char c = string.charAt(i);
+                if (!Character.isWhitespace(c)) {
+                    builder.append(c);
+                }
+            }
+            return builder.toString();
+        } else if (cullChars.isEmpty()) {
+            return string;
+        } else {
+            StringBuilder builder = new StringBuilder();
+            for (int i = 0; i < length; i++) {
+                char c = string.charAt(i);
+                if (cullChars.indexOf(c) == INDEX_NOT_FOUND) {
+                    builder.append(c);
+                }
+            }
+            return builder.toString();
+        }
+    }
+
+    /**
+     * <p>从字符串中剔除所有按 {@link Character#isWhitespace(char)} 定义的空白符。</p>
+     *
+     * <pre>
+     * StringAide.cull(null)        = null
+     * StringAide.cull("")          = ""
+     * StringAide.cull("  ab c  ")  = "abc"
+     * </pre>
+     *
+     * @param string 源字符串，可以为 null
+     * @return 剔除所有空白符之后的字符串
+     * @since 1.0.0
+     */
+    public static String cull(final String string) {
+        return cull(string, null);
+    }
+
+    /**
+     * <p>从字符串中剔除所有按 {@link Character#isWhitespace(char)} 定义的空白符。
+     * 当结果为 null 或 空串 时，返回 {@code null}。</p>
+     *
+     * @param string 源字符串，可以为 null
+     * @return 去掉所有空白符之后的字符串，或 {@code null}
+     * @since 1.0.0
+     */
+    public static String cullToNull(String string) {
+        if (isEmpty(string)) {
+            return null;
+        }
+        string = cull(string);
+        return string.isEmpty() ? null : string;
+    }
+
+    /**
+     * <p>从字符串中剔除所有按 {@link Character#isWhitespace(char)} 定义的空白符。
+     * 当结果为 null 或 空串 时，返回 空串。</p>
+     *
+     * @param string 源字符串，可以为 null
+     * @return 去掉所有空白符之后的字符串，或 空串
+     * @since 1.0.0
+     */
+    public static String cullToEmpty(String string) {
+        return string == null ? EMPTY : cull(string);
+    }
+    // ---------------------------------------------------------------------------------------------------
+    // ----- Cull string ----- end
+
+    // ----- Truncate string ----- begin
+    // ---------------------------------------------------------------------------------------------------
+    /**
+     * <p>从指定位置开始截取指定长度的字符串。</p>
+     *
+     * <p>注意：</p>
+     * <ul>
+     *     <li>如果源字符串 {@code string} 或者 {@code maxLength} 小于 0，则返回 {@code null}。</li>
+     *     <li>如果 {@code offset} 小于 0 则从 {@code string} 的起始位置开始截取。</li>
+     *     <li>如果 {@code offset} 大于 {@code string} 的长度，则返回一个空串。</li>
+     *     <li>如果 {@code maxLength} 大于 {@code string} 的长度，则截取到最后。</li>
+     * </ul>
+     *
+     * <pre>
+     * StringAide.truncate(null, 0, 0) = null
+     * StringAide.truncate(null, 2, 4) = null
+     * StringAide.truncate("", 0, 10) = ""
+     * StringAide.truncate("", 2, 10) = ""
+     * StringAide.truncate("abcdefghij", 0, 3) = "abc"
+     * StringAide.truncate("abcdefghij", 5, 6) , "fghij"
+     * StringAide.truncate("raspberry peach", 10, 15) = "peach"
+     * StringAide.truncate("abcdefghijklmno", 0, 10) = "abcdefghij"
+     * StringAide.truncate("abcdefghijklmno", -1, 10) = "abcdefghij"
+     * StringAide.truncate("abcdefghijklmno", Integer.MIN_VALUE, 10) = "abcdefghij"
+     * StringAide.truncate("abcdefghijklmno", Integer.MIN_VALUE, Integer.MAX_VALUE) = "abcdefghijklmno"
+     * StringAide.truncate("abcdefghijklmno", 0, Integer.MAX_VALUE) = "abcdefghijklmno"
+     * StringAide.truncate("abcdefghijklmno", 1, 10) = "bcdefghijk"
+     * StringAide.truncate("abcdefghijklmno", 2, 10) = "cdefghijkl"
+     * StringAide.truncate("abcdefghijklmno", 3, 10) = "defghijklm"
+     * StringAide.truncate("abcdefghijklmno", 4, 10) = "efghijklmn"
+     * StringAide.truncate("abcdefghijklmno", 5, 10) = "fghijklmno"
+     * StringAide.truncate("abcdefghijklmno", 5, 5) = "fghij"
+     * StringAide.truncate("abcdefghijklmno", 5, 3) = "fgh"
+     * StringAide.truncate("abcdefghijklmno", 10, 3) = "klm"
+     * StringAide.truncate("abcdefghijklmno", 10, Integer.MAX_VALUE) = "klmno"
+     * StringAide.truncate("abcdefghijklmno", 13, 1) = "n"
+     * StringAide.truncate("abcdefghijklmno", 13, Integer.MAX_VALUE) = "no"
+     * StringAide.truncate("abcdefghijklmno", 14, 1) = "o"
+     * StringAide.truncate("abcdefghijklmno", 14, Integer.MAX_VALUE) = "o"
+     * StringAide.truncate("abcdefghijklmno", 15, 1) = ""
+     * StringAide.truncate("abcdefghijklmno", 15, Integer.MAX_VALUE) = ""
+     * StringAide.truncate("abcdefghijklmno", Integer.MAX_VALUE, Integer.MAX_VALUE) = ""
+     * StringAide.truncate("abcdefghij", 3, -1) = null
+     * StringAide.truncate("abcdefghij", -2, 4) = "abcd"
+     * </pre>
+     *
+     * @param string 要截断的字符串，可以为 null
+     * @param offset 左偏移量
+     * @param maxLength 要截取的最大长度
+     * @return 截取到的字符串，若 {@code string} 为 null 或 {@code maxLength} 小于 0 时返回 {@code null}
+     * @since 1.0.0
+     */
     public static String truncate(final String string, int offset, int maxLength) {
         if (string == null || maxLength < 0) {
             return null;
@@ -67,11 +476,38 @@ public class StringAide extends CharSequenceAide {
         return string.substring(offset);
     }
 
-    // 从第一个字符开始截取指定长度的字符串
+    /**
+     * <p>截取指定长度的字符串。</p>
+     *
+     * <p>注意：</p>
+     * <ul>
+     *     <li>如果源字符串 {@code string} 或者 {@code maxLength} 小于 0，则返回 {@code null}。</li>
+     *     <li>如果 {@code maxLength} 大于 {@code string} 的长度，则截取到最后。</li>
+     * </ul>
+     *
+     * <pre>
+     * StringAide.truncate(null, 0) = null
+     * StringAide.truncate(null, 2) = null
+     * StringAide.truncate("", 4) = ""
+     * StringAide.truncate("abcdefg", 4) = "abcd"
+     * StringAide.truncate("abcdefg", 6) = "abcdef"
+     * StringAide.truncate("abcdefg", 7) = "abcdefg"
+     * StringAide.truncate("abcdefg", 8) = "abcdefg"
+     * StringAide.truncate("abcdefg", -1) = null
+     * </pre>
+     *
+     * @param string 要截断的字符串，可以为 null
+     * @param maxLength 要截取的最大长度
+     * @return 截取到的字符串，若 {@code string} 为 null 或 {@code maxLength} 小于 0 时返回 {@code null}
+     * @since 1.0.0
+     */
     public static String truncate(final String string, int maxLength) {
         return truncate(string, 0, maxLength);
     }
+    // ---------------------------------------------------------------------------------------------------
+    // ----- Truncate string ----- end
 
+    // TODO comments
     public static String substring(final String string, int begin) {
         if (string == null) {
             return null;
@@ -91,6 +527,7 @@ public class StringAide extends CharSequenceAide {
         return string.substring(begin);
     }
 
+    // TODO comments
     public static String substring(final String string, int begin, int end) {
         if (string == null) {
             return null;

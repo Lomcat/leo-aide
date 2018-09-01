@@ -25,15 +25,30 @@ import java.lang.reflect.Array;
  * TODO Kweny ArrayAide
  *
  * @author Kweny
- * @since 2018-09-01 0:38
+ * @since 1.0.0
  */
 public class ArrayAide {
 
     public static boolean isEmpty(final Object[] array) {
-        return getLength(array) == 0;
+        return length(array) == 0;
     }
 
-    public static int getLength(final Object[] array) {
+    public static boolean isEmpty(final char[] array) {
+        return length(array) == 0;
+    }
+
+    public static boolean isNotEmpty(final Object[] array) {
+        return !isEmpty(array);
+    }
+
+    public static int length(final Object[] array) {
+        if (array == null) {
+            return 0;
+        }
+        return Array.getLength(array);
+    }
+
+    public static int length(final Object array) {
         if (array == null) {
             return 0;
         }
