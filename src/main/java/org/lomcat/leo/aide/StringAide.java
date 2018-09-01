@@ -727,6 +727,114 @@ public class StringAide extends CharSequenceAide {
 
         return string.substring(begin, end);
     }
+
+    /**
+     * <p>获取字符串最左边的 {@code len} 个字符</p>
+     *
+     * <p>{@code str} 为 null 时返回 {@code null}；
+     * {@code len} 小于 0 时返回 空串；
+     * {@code len} 大于等于 {@code str.length()} 时返回 {@code str}。</p>
+     *
+     * <pre>
+     * StringAide.left(null, *)    = null
+     * StringAide.left(*, -ve)     = ""
+     * StringAide.left("", *)      = ""
+     * StringAide.left("abc", 0)   = ""
+     * StringAide.left("abc", 2)   = "ab"
+     * StringAide.left("abc", 4)   = "abc"
+     * </pre>
+     *
+     * @param str  源字符串
+     * @param len  截取的长度
+     * @return 子串
+     * @since 1.0.0
+     */
+    public static String left(final String str, final int len) {
+        if (str == null) {
+            return null;
+        }
+        if (len < 0) {
+            return EMPTY;
+        }
+        if (len >= str.length()) {
+            return str;
+        }
+        return str.substring(0, len);
+    }
+
+    /**
+     * <p>获取字符串最右边的 {@code len} 个字符。</p>
+     *
+     * <p>{@code str} 为 null 时返回 {@code null}；
+     * {@code len} 小于 0 时返回 空串；
+     * {@code len} 大于等于 {@code str.length()} 时返回 {@code str}。</p>
+     *
+     * <pre>
+     * StringAide.right(null, *)    = null
+     * StringAide.right(*, -ve)     = ""
+     * StringAide.right("", *)      = ""
+     * StringAide.right("abc", 0)   = ""
+     * StringAide.right("abc", 2)   = "bc"
+     * StringAide.right("abc", 4)   = "abc"
+     * </pre>
+     *
+     * @param str  源字符串
+     * @param len  截取的长度
+     * @return 子串
+     * @since 1.0.0
+     */
+    public static String right(final String str, final  int len) {
+        if (str == null) {
+            return null;
+        }
+        if (len < 0) {
+            return EMPTY;
+        }
+        if (len >= str.length()) {
+            return str;
+        }
+        return str.substring(str.length() - len);
+    }
+
+    /**
+     * <p>从字符串的中间获取 {@code len} 个字符。</p>
+     *
+     * <p>{@code str} 为 null 时返回 {@code null}；
+     * {@code len} 小于 0 或超过 {@code str} 长度时返回 空串；
+     * {@code from + len} 超出长度时取到源字符串最后。</p>
+     *
+     * <pre>
+     * StringAide.mid(null, *, *)    = null
+     * StringAide.mid(*, *, -ve)     = ""
+     * StringAide.mid("", 0, *)      = ""
+     * StringAide.mid("abc", 0, 2)   = "ab"
+     * StringAide.mid("abc", 0, 4)   = "abc"
+     * StringAide.mid("abc", 2, 4)   = "c"
+     * StringAide.mid("abc", 4, 2)   = ""
+     * StringAide.mid("abc", -2, 2)  = "ab"
+     * </pre>
+     *
+     * @param str 源字符串
+     * @param from 起始位置，负数视为 0
+     * @param len 要获取的子串长度
+     * @return 子串
+     * @since 1.0.0
+     */
+    public static String middle(final String str, int from, final int len) {
+        if (str == null) {
+            return null;
+        }
+        if (len < 0 || from > str.length()) {
+            return EMPTY;
+        }
+        if (from < 0) {
+            from = 0;
+        }
+        if (from + len >= str.length()) {
+            return str.substring(from);
+        }
+        return str.substring(from, from + len);
+    }
     // ---------------------------------------------------------------------------------------------------
     // ----- Substring ----- begin
 }
