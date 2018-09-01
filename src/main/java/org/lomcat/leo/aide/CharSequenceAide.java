@@ -62,115 +62,34 @@ public class CharSequenceAide {
         return chars;
     }
 
+    // ----- Sub sequence ----- begin
+    // ---------------------------------------------------------------------------------------------------
     /**
-     * <p>检查字符序列中是否包含指定字符。</p>
+     * <p>从字符序列中截取指定范围的子序列</p>
      *
-     * <p>{@code sequence} 为 null 或 empty 时返回 {@code false}。</p>
-     *
-     * <pre>
-     * CharSequenceAide.contains(null, *)    = false
-     * CharSequenceAide.contains("", *)      = false
-     * CharSequenceAide.contains("abc", 'a') = true
-     * CharSequenceAide.contains("abc", 'z') = false
-     * </pre>
-     *
-     * @param sequence 字符序列，可以为 null
-     * @param searchChar 要查找的字符
-     * @return true：{@code sequence} 中包含了 {@code searchChar}，
-     *          false：不包含
+     * @param sequence 源字符序列，可以为 null
+     * @param begin 起始位置
+     * @param end 结束位置
+     * @return 子序列
      * @since 1.0.0
      */
-    public static boolean contains(final CharSequence sequence, final int searchChar) {
-        if (isEmpty(sequence)) {
-            return false;
-        }
-        return indexOf(sequence, searchChar) >= 0;
+    public static CharSequence subSequence(final CharSequence sequence, int begin, int end) {
+        return sequence == null ? null : sequence.subSequence(begin, end);
     }
 
     /**
-     * <p>检查字符序列中是否包含指定字符序列。</p>
+     * <p>从字符序列中截取指定位置后的子序列</p>
      *
-     * <p>{@code sequence} 或 {@code searchSequence} 为 null 时返回 {@code false}。</p>
-     *
-     * <pre>
-     * CharSequenceAide.contains(null, *)     = false
-     * CharSequenceAide.contains(*, null)     = false
-     * CharSequenceAide.contains("", "")      = true
-     * CharSequenceAide.contains("abc", "")   = true
-     * CharSequenceAide.contains("abc", "a")  = true
-     * CharSequenceAide.contains("abc", "z")  = false
-     * </pre>
-     *
-     * @param sequence 字符序列，可以为 null
-     * @param searchSequence 要查找的字符序列
-     * @return true：{@code sequence} 中包含了 {@code searchSequence}，
-     *          false：不包含
+     * @param sequence 源字符序列，可以为 null
+     * @param begin 起始位置
+     * @return 子序列
      * @since 1.0.0
      */
-    public static boolean contains(final CharSequence sequence, final CharSequence searchSequence) {
-        if (sequence == null || searchSequence == null) {
-            return false;
-        }
-        return indexOf(sequence, searchSequence) >= 0;
+    public static CharSequence subSequence(final CharSequence sequence, final int begin) {
+        return subSequence(sequence, begin, sequence.length());
     }
-
-    /**
-     * <p>检查字符序列中是否包含指定字符序列，忽略大小写。</p>
-     *
-     * <p>{@code sequence} 或 {@code searchSequence} 为 null 时返回 {@code false}。</p>
-     *
-     * <pre>
-     * CharSequenceAide.containsIgnoreCase(null, *) = false
-     * CharSequenceAide.containsIgnoreCase(*, null) = false
-     * CharSequenceAide.containsIgnoreCase("", "") = true
-     * CharSequenceAide.containsIgnoreCase("abc", "") = true
-     * CharSequenceAide.containsIgnoreCase("abc", "a") = true
-     * CharSequenceAide.containsIgnoreCase("abc", "z") = false
-     * CharSequenceAide.containsIgnoreCase("abc", "A") = true
-     * CharSequenceAide.containsIgnoreCase("abc", "Z") = false
-     * </pre>
-     *
-     * @param sequence 字符序列，可以为 null
-     * @param searchSequence 要查找的字符序列
-     * @return true：{@code sequence} 中包含了 {@code searchSequence}，
-     *          false：不包含
-     * @since 1.0.0
-     */
-    public static boolean containsIgnoreCase(final CharSequence sequence, final CharSequence searchSequence) {
-        if (sequence == null || searchSequence == null) {
-            return false;
-        }
-        final int searchLength = searchSequence.length();
-        final int max = sequence.length() - searchLength;
-        for (int i = 0; i < max; i++) {
-            if (regionMatches(true, sequence, i, searchSequence, 0, searchLength)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * <p>检查字符序列中是否包含空白符。</p>
-     *
-     * <p>空白符由 {@link Character#isWhitespace(char)} 定义。</p>
-     *
-     * @param sequence 字符序列
-     * @return 是否包含
-     * @since 1.0.0
-     */
-    public static boolean containsWhitespace(final CharSequence sequence) {
-        int length;
-        if ((length = length(sequence)) == 0) {
-            return false;
-        }
-        for (int i = 0; i < length; i++) {
-            if (Character.isWhitespace(sequence.charAt(i))) {
-                return true;
-            }
-        }
-        return false;
-    }
+    // ---------------------------------------------------------------------------------------------------
+    // ----- Sub sequence ----- end
 
     // ----- Checking ----- begin
     // ---------------------------------------------------------------------------------------------------
@@ -418,6 +337,8 @@ public class CharSequenceAide {
     // ---------------------------------------------------------------------------------------------------
     // ----- Checking ----- end
 
+    // ----- first/last non-null/non-empty/non-blank ----- begin
+    // ---------------------------------------------------------------------------------------------------
     /**
      * <p>从数组中获取第一个 non-null 的字符序列。</p>
      *
@@ -432,6 +353,29 @@ public class CharSequenceAide {
     public static <T extends CharSequence> T firstNonNull(final T... sequences) {
         if (ArrayAide.isNotEmpty(sequences)) {
             for (final T sequence : sequences) {
+                if (sequence != null) {
+                    return sequence;
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
+     * <p>从数组中获取最后一个 non-null 的字符序列。</p>
+     *
+     * <p>如果数组为 null 或 empty 或数组中没有 non-null 的元素，则返回 {@code null}。</p>
+     *
+     * @param sequences 字符序列数组
+     * @param <T> 数组元素的类型，{@link CharSequence} 的子类
+     * @return 最后一个 non-null 的字符序列，或 {@code null}
+     * @since 1.0.0
+     */
+    @SafeVarargs
+    public static <T extends CharSequence> T lastNonNull(final T... sequences) {
+        if (ArrayAide.isNotEmpty(sequences)) {
+            for (int i = sequences.length - 1; i >= 0; i--) {
+                T sequence = sequences[i];
                 if (sequence != null) {
                     return sequence;
                 }
@@ -473,6 +417,29 @@ public class CharSequenceAide {
     }
 
     /**
+     * <p>返回数组中最后一个 non-empty 的字符序列。</p>
+     *
+     * <p>如果数组为 null 或 empty 或数组中没有 non-empty 字符串，则返回 {@code null}。</p>
+     *
+     * @param sequences 字符序列数组
+     * @param <T> 数组元素的类型，{@link CharSequence} 的子类
+     * @return 最后一个 non-empty 的字符序列，或 {@code null}
+     * @since 1.0.0
+     */
+    @SafeVarargs
+    public static <T extends CharSequence> T lastNonEmpty(final T... sequences) {
+        if (ArrayAide.isNotEmpty(sequences)) {
+            for (int i = sequences.length - 1; i >= 0; i--) {
+                T sequence = sequences[i];
+                if (isNotEmpty(sequence)) {
+                    return sequence;
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
      * <p>返回数组中第一个 non-blank 的字符串</p>
      *
      * <p>如果数组为 null 或 empty 或数组中没有 non-blank 字符串，则返回 {@code null}。</p>
@@ -504,34 +471,30 @@ public class CharSequenceAide {
         return null;
     }
 
-    // ----- Sub sequence ----- begin
-    // ---------------------------------------------------------------------------------------------------
     /**
-     * <p>从字符序列中截取指定范围的子序列</p>
+     * <p>返回数组中最后一个 non-blank 的字符串</p>
      *
-     * @param sequence 源字符序列，可以为 null
-     * @param begin 起始位置
-     * @param end 结束位置
-     * @return 子序列
+     * <p>如果数组为 null 或 empty 或数组中没有 non-blank 字符串，则返回 {@code null}。</p>
+     *
+     * @param sequences 字符序列数组
+     * @param <T> 数组元素的类型，{@link CharSequence} 的子类
+     * @return 最后一个 non-blank 的字符序列，或 {@code null}
      * @since 1.0.0
      */
-    public static CharSequence subSequence(final CharSequence sequence, int begin, int end) {
-        return sequence == null ? null : sequence.subSequence(begin, end);
-    }
-
-    /**
-     * <p>从字符序列中截取指定位置后的子序列</p>
-     *
-     * @param sequence 源字符序列，可以为 null
-     * @param begin 起始位置
-     * @return 子序列
-     * @since 1.0.0
-     */
-    public static CharSequence subSequence(final CharSequence sequence, final int begin) {
-        return subSequence(sequence, begin, sequence.length());
+    @SafeVarargs
+    public static <T extends CharSequence> T lastNonBlank(final T... sequences) {
+        if (ArrayAide.isNotEmpty(sequences)) {
+            for (int i = sequences.length - 1; i >= 0; i--) {
+                T sequence = sequences[i];
+                if (isNotBlank(sequence)) {
+                    return sequence;
+                }
+            }
+        }
+        return null;
     }
     // ---------------------------------------------------------------------------------------------------
-    // ----- Sub sequence ----- end
+    // ----- first/last non-null/non-empty/non-blank ----- end
 
     // ----- Equal ----- begin
     // ---------------------------------------------------------------------------------------------------
@@ -1190,11 +1153,7 @@ public class CharSequenceAide {
         }
         return lastIndexOfIgnoreCase(sequence, searchSequence, sequence.length());
     }
-    // ---------------------------------------------------------------------------------------------------
-    // ----- Index of ----- end
 
-    // ----- Index of any ----- begin
-    // ---------------------------------------------------------------------------------------------------
     /**
      * <p>查找指定字符集中的字符在字符序列中第一次出现的索引。</p>
      *
@@ -1225,10 +1184,10 @@ public class CharSequenceAide {
         int searchLength = searchChars.length;
         int searchLast = searchLength - 1;
         for (int i = 0; i < sequenceLength; i++) {
-            char c = sequence.charAt(i);
+            char ch = sequence.charAt(i);
             for (int j = 0; j < searchLength; j++) {
-                if (searchChars[j] == c) {
-                    if (i < sequenceLast && j < searchLast && Character.isHighSurrogate(c)) {
+                if (searchChars[j] == ch) {
+                    if (i < sequenceLast && j < searchLast && Character.isHighSurrogate(ch)) {
                         if (searchChars[j + 1] == sequence.charAt(i + 1)) {
                             return i;
                         }
@@ -1268,6 +1227,561 @@ public class CharSequenceAide {
         }
         return indexOfAny(sequence, toCharArray(searchChars));
     }
+
+    /**
+     * <p>查找字符序列中第一个不是给定字符的索引。</p>
+     *
+     * <p>{@code sequence} 为 null 或 empty 时返回 {@code -1}。
+     * {@code searchChars} 为 null 或 empty 时返回 {@code -1}。</p>
+     *
+     * <pre>
+     * CharSequenceAide.indexOfAnyBut(null, *)                              = -1
+     * CharSequenceAide.indexOfAnyBut("", *)                                = -1
+     * CharSequenceAide.indexOfAnyBut(*, null)                              = -1
+     * CharSequenceAide.indexOfAnyBut(*, [])                                = -1
+     * CharSequenceAide.indexOfAnyBut("zzabyycdxx", new char[] {'z', 'a'} ) = 3
+     * CharSequenceAide.indexOfAnyBut("aba", new char[] {'z'} )             = 0
+     * CharSequenceAide.indexOfAnyBut("aba", new char[] {'a', 'b'} )        = -1
+
+     * </pre>
+     *
+     * @param sequence 字符序列
+     * @param searchChars 要查找的字符集
+     * @return 索引值
+     * @since 1.0.0
+     */
+    public static int indexOfNonAny(final CharSequence sequence, final char... searchChars) {
+        if (isEmpty(sequence) || ArrayAide.isEmpty(searchChars)) {
+            return INDEX_NOT_FOUND;
+        }
+        int sequenceLength = sequence.length();
+        int sequenceLast = sequenceLength - 1;
+        int searchLength = searchChars.length;
+        int searchLast = sequenceLength - 1;
+        outer:
+        for (int i = 0; i < sequenceLength; i++) {
+            char ch = sequence.charAt(i);
+            for (int j = 0; j < searchLength; j++) {
+                if (searchChars[j] == ch) {
+                    if (i < sequenceLast && j < searchLast && Character.isHighSurrogate(ch)) {
+                        if (searchChars[j + 1] == sequence.charAt(i + 1)) {
+                            continue outer;
+                        }
+                    } else {
+                        continue outer;
+                    }
+                }
+            }
+            return i;
+        }
+        return INDEX_NOT_FOUND;
+    }
+
+    /**
+     * <p>查找字符序列中第一个不是给定字符的索引。</p>
+     *
+     * <p>{@code sequence} 为 null 或 empty 时返回 {@code -1}。
+     * {@code searchChars} 为 null 或 empty 时返回 {@code -1}。</p>
+     *
+     * <pre>
+     * CharSequenceAide.indexOfAnyBut(null, *)            = -1
+     * CharSequenceAide.indexOfAnyBut("", *)              = -1
+     * CharSequenceAide.indexOfAnyBut(*, null)            = -1
+     * CharSequenceAide.indexOfAnyBut(*, "")              = -1
+     * CharSequenceAide.indexOfAnyBut("zzabyycdxx", "za") = 3
+     * CharSequenceAide.indexOfAnyBut("zzabyycdxx", "")   = -1
+     * CharSequenceAide.indexOfAnyBut("aba","ab")         = -1
+     * </pre>
+     *
+     * @param sequence 字符序列
+     * @param searchChars 要查找的字符集
+     * @return 索引值
+     * @since 1.0.0
+     */
+    public static int indexOfNonAny(final CharSequence sequence, final CharSequence searchChars) {
+        if (isEmpty(sequence) || isEmpty(searchChars)) {
+            return INDEX_NOT_FOUND;
+        }
+        int sequenceLength = sequence.length();
+        for (int i = 0; i < sequenceLength; i++) {
+            char ch = sequence.charAt(i);
+            boolean chFound = indexOf(searchChars, ch) >= 0;
+            if (i + 1 < sequenceLength && Character.isHighSurrogate(ch)) {
+                char ch2 = sequence.charAt(i + 1);
+                if (chFound && indexOf(searchChars, ch2) < 0) {
+                    return i;
+                }
+            } else
+                if (!chFound) {
+                    return i;
+                }
+        }
+        return INDEX_NOT_FOUND;
+    }
+
+    /**
+     * <p>查找一组字符序列第一次出现的索引。</p>
+     *
+     * <p>{@code sequence} 为 null 时返回 {@code -1}。
+     * {@code searchSequences} 为 null 或 empty 时返回 {@code -1}。
+     * {@code searchSequences} 中的 null 元素将被忽略，
+     * 如果 {@code sequence} 不为 null，则 {@code searchSequences} 中包含 空串 时将返回 {@code 0}。</p>
+     *
+     * <pre>
+     * CharSequenceAide.indexOfAny(null, *)                     = -1
+     * CharSequenceAide.indexOfAny(*, null)                     = -1
+     * CharSequenceAide.indexOfAny(*, [])                       = -1
+     * CharSequenceAide.indexOfAny("zzabyycdxx", ["ab","cd"])   = 2
+     * CharSequenceAide.indexOfAny("zzabyycdxx", ["cd","ab"])   = 2
+     * CharSequenceAide.indexOfAny("zzabyycdxx", ["mn","op"])   = -1
+     * CharSequenceAide.indexOfAny("zzabyycdxx", ["zab","aby"]) = 1
+     * CharSequenceAide.indexOfAny("zzabyycdxx", [""])          = 0
+     * CharSequenceAide.indexOfAny("", [""])                    = 0
+     * CharSequenceAide.indexOfAny("", ["a"])                   = -1
+     * </pre>
+     *
+     * @param sequence 字符序列
+     * @param searchSequences 要查找的一组字符序列
+     * @return {@code searchSequences} 中最先在 {@code sequence} 出现的那个元素所位于 {@code sequence} 的索引
+     * @since 1.0.0
+     */
+    public static int indexOfAny(final CharSequence sequence, final CharSequence... searchSequences) {
+        if (sequence == null || searchSequences == null) {
+            return INDEX_NOT_FOUND;
+        }
+        int ret = Integer.MAX_VALUE;
+        int tmp;
+        for (final CharSequence searchSequence : searchSequences) {
+            if (searchSequence == null) {
+                continue;
+            }
+            tmp = indexOf(sequence, searchSequence);
+            if (tmp == INDEX_NOT_FOUND) {
+                continue;
+            }
+            if (tmp < ret) {
+                ret = tmp;
+            }
+        }
+        return ret == Integer.MAX_VALUE ? INDEX_NOT_FOUND : ret;
+    }
+
+    /**
+     * <p>查找一组字符序列最后一次出现的索引。</p>
+     *
+     * <p>{@code sequence} 为 null 时返回 {@code -1}。
+     * {@code searchSequences} 为 null 或 empty 时返回 {@code -1}。
+     * {@code searchSequences} 中的 null 元素将被忽略，
+     * 如果 {@code sequence} 不为 null，则 {@code searchSequences} 中包含 空串 时将返回 {@code sequence.length()}。</p>
+     *
+     * <pre>
+     * CharSequenceAide.lastIndexOfAny(null, *)                   = -1
+     * CharSequenceAide.lastIndexOfAny(*, null)                   = -1
+     * CharSequenceAide.lastIndexOfAny(*, [])                     = -1
+     * CharSequenceAide.lastIndexOfAny(*, [null])                 = -1
+     * CharSequenceAide.lastIndexOfAny("zzabyycdxx", ["ab","cd"]) = 6
+     * CharSequenceAide.lastIndexOfAny("zzabyycdxx", ["cd","ab"]) = 6
+     * CharSequenceAide.lastIndexOfAny("zzabyycdxx", ["mn","op"]) = -1
+     * CharSequenceAide.lastIndexOfAny("zzabyycdxx", ["mn","op"]) = -1
+     * CharSequenceAide.lastIndexOfAny("zzabyycdxx", ["mn",""])   = 10
+     * </pre>
+     *
+     * @param sequence 字符序列
+     * @param searchSequences 要查找的一组字符序列
+     * @return {@code searchSequences} 中最后在 {@code sequence} 出现的那个元素所位于 {@code sequence} 的索引
+     * @since 1.0.0
+     */
+    public static int lastIndexOfAny(final CharSequence sequence, final CharSequence... searchSequences) {
+        if (sequence == null || searchSequences == null) {
+            return INDEX_NOT_FOUND;
+        }
+        int ret = INDEX_NOT_FOUND;
+        int tmp;
+        for (final CharSequence searchSequence : searchSequences) {
+            if (searchSequence == null) {
+                continue;
+            }
+            tmp = lastIndexOf(sequence, searchSequence, sequence.length());
+            if (tmp > ret) {
+                ret = tmp;
+            }
+        }
+        return ret;
+    }
     // ---------------------------------------------------------------------------------------------------
-    // ----- Index of any ----- end
+    // ----- Index of ----- end
+
+    // ----- contains ----- begin
+    // ---------------------------------------------------------------------------------------------------
+    /**
+     * <p>检查字符序列中是否包含指定字符。</p>
+     *
+     * <p>{@code sequence} 为 null 或 empty 时返回 {@code false}。</p>
+     *
+     * <pre>
+     * CharSequenceAide.contains(null, *)    = false
+     * CharSequenceAide.contains("", *)      = false
+     * CharSequenceAide.contains("abc", 'a') = true
+     * CharSequenceAide.contains("abc", 'z') = false
+     * </pre>
+     *
+     * @param sequence 字符序列，可以为 null
+     * @param searchChar 要查找的字符
+     * @return true：{@code sequence} 中包含了 {@code searchChar}，
+     *          false：不包含
+     * @since 1.0.0
+     */
+    public static boolean contains(final CharSequence sequence, final int searchChar) {
+        if (isEmpty(sequence)) {
+            return false;
+        }
+        return indexOf(sequence, searchChar) >= 0;
+    }
+
+    /**
+     * <p>检查字符序列中是否包含指定字符序列。</p>
+     *
+     * <p>{@code sequence} 或 {@code searchSequence} 为 null 时返回 {@code false}。</p>
+     *
+     * <pre>
+     * CharSequenceAide.contains(null, *)     = false
+     * CharSequenceAide.contains(*, null)     = false
+     * CharSequenceAide.contains("", "")      = true
+     * CharSequenceAide.contains("abc", "")   = true
+     * CharSequenceAide.contains("abc", "a")  = true
+     * CharSequenceAide.contains("abc", "z")  = false
+     * </pre>
+     *
+     * @param sequence 字符序列，可以为 null
+     * @param searchSequence 要查找的字符序列
+     * @return true：{@code sequence} 中包含了 {@code searchSequence}，
+     *          false：不包含
+     * @since 1.0.0
+     */
+    public static boolean contains(final CharSequence sequence, final CharSequence searchSequence) {
+        if (sequence == null || searchSequence == null) {
+            return false;
+        }
+        return indexOf(sequence, searchSequence) >= 0;
+    }
+
+    /**
+     * <p>检查字符序列中是否包含指定字符序列，忽略大小写。</p>
+     *
+     * <p>{@code sequence} 或 {@code searchSequence} 为 null 时返回 {@code false}。</p>
+     *
+     * <pre>
+     * CharSequenceAide.containsIgnoreCase(null, *) = false
+     * CharSequenceAide.containsIgnoreCase(*, null) = false
+     * CharSequenceAide.containsIgnoreCase("", "") = true
+     * CharSequenceAide.containsIgnoreCase("abc", "") = true
+     * CharSequenceAide.containsIgnoreCase("abc", "a") = true
+     * CharSequenceAide.containsIgnoreCase("abc", "z") = false
+     * CharSequenceAide.containsIgnoreCase("abc", "A") = true
+     * CharSequenceAide.containsIgnoreCase("abc", "Z") = false
+     * </pre>
+     *
+     * @param sequence 字符序列，可以为 null
+     * @param searchSequence 要查找的字符序列
+     * @return true：{@code sequence} 中包含了 {@code searchSequence}，
+     *          false：不包含
+     * @since 1.0.0
+     */
+    public static boolean containsIgnoreCase(final CharSequence sequence, final CharSequence searchSequence) {
+        if (sequence == null || searchSequence == null) {
+            return false;
+        }
+        final int searchLength = searchSequence.length();
+        final int max = sequence.length() - searchLength;
+        for (int i = 0; i < max; i++) {
+            if (regionMatches(true, sequence, i, searchSequence, 0, searchLength)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * <p>检查字符序列中是否包含空白符。</p>
+     *
+     * <p>空白符由 {@link Character#isWhitespace(char)} 定义。</p>
+     *
+     * @param sequence 字符序列
+     * @return 是否包含
+     * @since 1.0.0
+     */
+    public static boolean containsWhitespace(final CharSequence sequence) {
+        int length;
+        if ((length = length(sequence)) == 0) {
+            return false;
+        }
+        for (int i = 0; i < length; i++) {
+            if (Character.isWhitespace(sequence.charAt(i))) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * <p>检查字符序列中是否包含指定字符集中的任意字符。</p>
+     *
+     * <p>{@code sequence} 为 null 或 empty 时返回 {@code false}，
+     * {@code searchChars} 为 empty 时返回 {@code false}。</p>
+     *
+     * <pre>
+     * CharSequenceAide.containsAny(null, *)                = false
+     * CharSequenceAide.containsAny("", *)                  = false
+     * CharSequenceAide.containsAny(*, null)                = false
+     * CharSequenceAide.containsAny(*, [])                  = false
+     * CharSequenceAide.containsAny("zzabyycdxx",['z','a']) = true
+     * CharSequenceAide.containsAny("zzabyycdxx",['b','y']) = true
+     * CharSequenceAide.containsAny("zzabyycdxx",['z','y']) = true
+     * CharSequenceAide.containsAny("aba", ['z'])           = false
+     * </pre>
+     *
+     * @param sequence 字符序列
+     * @param searchChars 要查找的字符集
+     * @return 是否包含
+     * @since 1.0.0
+     */
+    public static boolean containsAny(final CharSequence sequence, final char... searchChars) {
+        if (isEmpty(sequence) || ArrayAide.isEmpty(searchChars)) {
+            return false;
+        }
+        int sequenceLength = sequence.length();
+        int sequenceLast = sequenceLength - 1;
+        int searchLength = searchChars.length;
+        int searchLast = searchLength - 1;
+        for (int i = 0; i < sequenceLength; i++) {
+            char ch = sequence.charAt(i);
+            for (int j = 0; j < searchLength; j++) {
+                if (searchChars[j] == ch) {
+                    if (Character.isHighSurrogate(ch)) {
+                        if (j == searchLast) {
+                            return true;
+                        }
+                        if (i < sequenceLast && searchChars[j + 1] == sequence.charAt(i + 1)) {
+                            return true;
+                        }
+                    } else {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * <p>检查字符序列中是否包含指定字符集中的任意字符。</p>
+     *
+     * <p>{@code sequence} 为 null 或 empty 时返回 {@code false}，
+     * {@code searchChars} 为 null 时返回 {@code false}。</p>
+     *
+     * <p>
+     * A {@code null} CharSequence will return {@code false}. A {@code null} search CharSequence will return
+     * {@code false}.
+     * </p>
+     *
+     * <pre>
+     * CharSequenceAide.containsAny(null, *)               = false
+     * CharSequenceAide.containsAny("", *)                 = false
+     * CharSequenceAide.containsAny(*, null)               = false
+     * CharSequenceAide.containsAny(*, "")                 = false
+     * CharSequenceAide.containsAny("zzabyycdxx", "za")    = true
+     * CharSequenceAide.containsAny("zzabyycdxx", "by")    = true
+     * CharSequenceAide.containsAny("zzabyycdxx", "zy")    = true
+     * CharSequenceAide.containsAny("zzabyycdxx", "\tx")   = true
+     * CharSequenceAide.containsAny("zzabyycdxx", "$.#yF") = true
+     * CharSequenceAide.containsAny("aba","z")             = false
+     * </pre>
+     *
+     * @param sequence 字符序列
+     * @param searchChars 要查找的字符集
+     * @return 是否包含
+     * @since 1.0.0
+     */
+    public static boolean containsAny(final CharSequence sequence, final CharSequence searchChars) {
+        if (searchChars == null) {
+            return false;
+        }
+        return containsAny(sequence, toCharArray(searchChars));
+    }
+
+    /**
+     * <p>检查字符序列中是否包含给定数组中的任意字符序列。</p>
+     *
+     * <p>{@code sequence} 为 null 或 empty 时返回 {@code false}。
+     * {@code searchSequences} 为 null 或 empty 时返回 {@code false}。
+     * </p>
+     *
+     * <pre>
+     * CharSequenceAide.containsAny(null, *)            = false
+     * CharSequenceAide.containsAny("", *)              = false
+     * CharSequenceAide.containsAny(*, null)            = false
+     * CharSequenceAide.containsAny(*, [])              = false
+     * CharSequenceAide.containsAny("abcd", "ab", null) = true
+     * CharSequenceAide.containsAny("abcd", "ab", "cd") = true
+     * CharSequenceAide.containsAny("abc", "d", "abc")  = true
+     * </pre>
+     *
+     *
+     * @param sequence 字符序列
+     * @param searchSequences 要查找的字符序列数组
+     * @return 是否包含
+     * @since 1.0.0
+     */
+    public static boolean containsAny(final CharSequence sequence, final CharSequence... searchSequences) {
+        if (isEmpty(sequence) || ArrayAide.isEmpty(searchSequences)) {
+            return false;
+        }
+        for (final CharSequence searchSequence : searchSequences) {
+            if (contains(sequence, searchSequence)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * <p>检查字符序列是否只包含指定的字符集</p>
+     *
+     * <p>{@code sequence} 为 null 时返回 {@code false}，为 empty 时返回 {@code true}。
+     * {@code validChars} 为 null 时返回 {@code false}。</p>
+     *
+     * <pre>
+     * CharSequenceAide.containsOnly(null, *)       = false
+     * CharSequenceAide.containsOnly(*, null)       = false
+     * CharSequenceAide.containsOnly("", *)         = true
+     * CharSequenceAide.containsOnly("ab", '')      = false
+     * CharSequenceAide.containsOnly("abab", 'abc') = true
+     * CharSequenceAide.containsOnly("ab1", 'abc')  = false
+     * CharSequenceAide.containsOnly("abz", 'abc')  = false
+     * </pre>
+     *
+     * @param sequence 字符序列
+     * @param validChars 有效的字符集
+     * @return 如果字符序列中除了指定的字符集外不包含其它字符，则返回 true
+     * @since 1.0.0
+     */
+    public static boolean containsOnly(final CharSequence sequence, final char... validChars) {
+        if (sequence == null || validChars == null) {
+            return false;
+        }
+        if (sequence.length() == 0) {
+            return true;
+        }
+        if (validChars.length == 0) {
+            return false;
+        }
+        return indexOfNonAny(sequence, validChars) == INDEX_NOT_FOUND;
+    }
+
+    /**
+     * <p>检查字符序列是否只包含指定的字符集</p>
+     *
+     * <p>{@code sequence} 为 null 时返回 {@code false}，为 empty 时返回 {@code true}。
+     * {@code validChars} 为 null 时返回 {@code false}。</p>
+     *
+     * <pre>
+     * CharSequenceAide.containsOnly(null, *)       = false
+     * CharSequenceAide.containsOnly(*, null)       = false
+     * CharSequenceAide.containsOnly("", *)         = true
+     * CharSequenceAide.containsOnly("ab", "")      = false
+     * CharSequenceAide.containsOnly("abab", "abc") = true
+     * CharSequenceAide.containsOnly("ab1", "abc")  = false
+     * CharSequenceAide.containsOnly("abz", "abc")  = false
+     * </pre>
+     *
+     * @param sequence 字符序列
+     * @param validChars 有效的字符集
+     * @return 如果字符序列中除了指定的字符集外不包含其它字符，则返回 true
+     * @since 1.0.0
+     */
+    public static boolean containsOnly(final CharSequence sequence, final CharSequence validChars) {
+        if (sequence == null || validChars == null) {
+            return false;
+        }
+        return containsOnly(sequence, toCharArray(validChars));
+    }
+
+    /**
+     * <p>检查字符序列中是否 不包含 指定字符集</p>
+     *
+     * <p>{@code sequence} 为 null 或 empty 时返回 {@code true}。
+     * {@code invalidChars} 为 null 时返回 {@code true}。</p>
+     *
+     * <pre>
+     * CharSequenceAide.containsNone(null, *)       = true
+     * CharSequenceAide.containsNone(*, null)       = true
+     * CharSequenceAide.containsNone("", *)         = true
+     * CharSequenceAide.containsNone("ab", '')      = true
+     * CharSequenceAide.containsNone("abab", 'xyz') = true
+     * CharSequenceAide.containsNone("ab1", 'xyz')  = true
+     * CharSequenceAide.containsNone("abz", 'xyz')  = false
+     * </pre>
+     *
+     * @param sequence 字符序列
+     * @param invalidChars 要查找的字符集
+     * @return 如果字符序列中除了指定的字符集外不包含其它字符，则返回 true
+     * @since 1.0.0
+     */
+    public static boolean containsNone(final CharSequence sequence, final char... invalidChars) {
+        if (sequence == null || invalidChars == null) {
+            return true;
+        }
+        int sequenceLength = sequence.length();
+        int sequenceLast = sequenceLength - 1;
+        int searchLength = invalidChars.length;
+        int searchLast = searchLength - 1;
+        for (int i = 0; i < sequenceLength; i++) {
+            char ch = sequence.charAt(i);
+            for (int j = 0; j < searchLength; j++) {
+                if (invalidChars[j] == ch) {
+                    if (Character.isHighSurrogate(ch)) {
+                        if (j == searchLast) {
+                            return false;
+                        }
+                        if (i < sequenceLast && invalidChars[j + 1] == sequence.charAt(i + 1)) {
+                            return false;
+                        }
+                    } else {
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
+    /**
+     * <p>检查字符序列中是否 不包含 指定字符集</p>
+     *
+     * <p>{@code sequence} 为 null 或 empty 时返回 {@code true}。
+     * {@code invalidChars} 为 null 时返回 {@code true}。</p>
+     *
+     * <pre>
+     * CharSequenceAide.containsNone(null, *)       = true
+     * CharSequenceAide.containsNone(*, null)       = true
+     * CharSequenceAide.containsNone("", *)         = true
+     * CharSequenceAide.containsNone("ab", "")      = true
+     * CharSequenceAide.containsNone("abab", "xyz") = true
+     * CharSequenceAide.containsNone("ab1", "xyz")  = true
+     * CharSequenceAide.containsNone("abz", "xyz")  = false
+     * </pre>
+     *
+     * @param sequence 字符序列
+     * @param invalidChars 要查找的字符集
+     * @return 如果字符序列中除了指定的字符集外不包含其它字符，则返回 true
+     * @since 1.0.0
+     */
+    public static boolean containsNone(final CharSequence sequence, final CharSequence invalidChars) {
+        if (sequence == null || invalidChars == null) {
+            return true;
+        }
+        return containsNone(sequence, toCharArray(invalidChars));
+    }
+    // ---------------------------------------------------------------------------------------------------
+    // ----- contains ----- end
 }

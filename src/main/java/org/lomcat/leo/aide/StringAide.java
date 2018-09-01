@@ -507,7 +507,154 @@ public class StringAide extends CharSequenceAide {
     // ---------------------------------------------------------------------------------------------------
     // ----- Truncate string ----- end
 
-    // TODO comments
+    // ----- Compare string ----- begin
+    // ---------------------------------------------------------------------------------------------------
+    /**
+     * <p>按字典顺序比较两个字符串。</p>
+     *
+     * <pre>
+     * StringAide.compare(null, null, *)     = 0
+     * StringAide.compare(null , "a", true)  &lt; 0
+     * StringAide.compare(null , "a", false) &gt; 0
+     * StringAide.compare("a", null, true)   &gt; 0
+     * StringAide.compare("a", null, false)  &lt; 0
+     * StringAide.compare("abc", "abc", *)   = 0
+     * StringAide.compare("a", "b", *)       &lt; 0
+     * StringAide.compare("b", "a", *)       &gt; 0
+     * StringAide.compare("a", "B", *)       &gt; 0
+     * StringAide.compare("ab", "abc", *)    &lt; 0
+     * </pre>
+     *
+     * @param str1 一个字符串
+     * @param str2 另一个字符串
+     * @param nullIsLess 如果为 true 则 {@code null} 小于 {@code non-null}
+     * @return 0：相等；正数：{@code str1} 大于 {@code str2}；负数：{@code str1} 小于 {@code str2}
+     * @since 1.0.0
+     */
+    public static int compare(final String str1, final String str2, final boolean nullIsLess) {
+        if (equals(str1, str2)) {
+            return 0;
+        }
+        if (str1 == null) {
+            return nullIsLess ? -1 : 1;
+        }
+        if (str2 == null) {
+            return nullIsLess ? 1 : -1;
+        }
+        return str1.compareTo(str2);
+    }
+
+    /**
+     * <p>按字典顺序比较两个字符串（{@code null} 小于 {@code non-null}）。</p>
+     *
+     * <pre>
+     * StringAide.compare(null, null)   = 0
+     * StringAide.compare(null , "a")   &lt; 0
+     * StringAide.compare("a", null)    &gt; 0
+     * StringAide.compare("abc", "abc") = 0
+     * StringAide.compare("a", "b")     &lt; 0
+     * StringAide.compare("b", "a")     &gt; 0
+     * StringAide.compare("a", "B")     &gt; 0
+     * StringAide.compare("ab", "abc")  &lt; 0
+     * </pre>
+     *
+     * @param str1 一个字符串
+     * @param str2 另一个字符串
+     * @return 0：相等；正数：{@code str1} 大于 {@code str2}；负数：{@code str1} 小于 {@code str2}
+     * @since 1.0.0
+     */
+    public static int compare(final String str1, final String str2) {
+        return compare(str1, str2, true);
+    }
+
+    /**
+     * <p>按字典顺序比较两个字符串，忽略大小写。</p>
+     *
+     * <pre>
+     * StringAide.compareIgnoreCase(null, null, *)     = 0
+     * StringAide.compareIgnoreCase(null , "a", true)  &lt; 0
+     * StringAide.compareIgnoreCase(null , "a", false) &gt; 0
+     * StringAide.compareIgnoreCase("a", null, true)   &gt; 0
+     * StringAide.compareIgnoreCase("a", null, false)  &lt; 0
+     * StringAide.compareIgnoreCase("abc", "abc", *)   = 0
+     * StringAide.compareIgnoreCase("abc", "ABC", *)   = 0
+     * StringAide.compareIgnoreCase("a", "b", *)       &lt; 0
+     * StringAide.compareIgnoreCase("b", "a", *)       &gt; 0
+     * StringAide.compareIgnoreCase("a", "B", *)       &lt; 0
+     * StringAide.compareIgnoreCase("A", "b", *)       &lt; 0
+     * StringAide.compareIgnoreCase("ab", "abc", *)    &lt; 0
+     * </pre>
+     *
+     * @param str1 一个字符串
+     * @param str2 另一个字符串
+     * @param nullIsLess 如果为 true 则 {@code null} 小于 {@code non-null}
+     * @return 0：相等；正数：{@code str1} 大于 {@code str2}；负数：{@code str1} 小于 {@code str2}
+     * @since 1.0.0
+     */
+    public static int compareIgnoreCase(final String str1, final String str2, final boolean nullIsLess) {
+        if (equals(str1, str2)) {
+            return 0;
+        }
+        if (str1 == null) {
+            return nullIsLess ? -1 : 1;
+        }
+        if (str2 == null) {
+            return nullIsLess ? 1 : -1;
+        }
+        return str1.compareToIgnoreCase(str2);
+    }
+
+    /**
+     * <p>按字典顺序比较两个字符串，忽略大小写（{@code null} 小于 {@code non-null}）。</p>
+     *
+     * <pre>
+     * StringAide.compareIgnoreCase(null, null)   = 0
+     * StringAide.compareIgnoreCase(null , "a")   &lt; 0
+     * StringAide.compareIgnoreCase("a", null)    &gt; 0
+     * StringAide.compareIgnoreCase("abc", "abc") = 0
+     * StringAide.compareIgnoreCase("abc", "ABC") = 0
+     * StringAide.compareIgnoreCase("a", "b")     &lt; 0
+     * StringAide.compareIgnoreCase("b", "a")     &gt; 0
+     * StringAide.compareIgnoreCase("a", "B")     &lt; 0
+     * StringAide.compareIgnoreCase("A", "b")     &lt; 0
+     * StringAide.compareIgnoreCase("ab", "ABC")  &lt; 0
+     * </pre>
+     *
+     * @param str1 一个字符串
+     * @param str2 另一个字符串
+     * @return 0：相等；正数：{@code str1} 大于 {@code str2}；负数：{@code str1} 小于 {@code str2}
+     * @since 1.0.0
+     */
+    public static int compareIgnoreCase(final String str1, final String str2) {
+        return compareIgnoreCase(str1, str2, true);
+    }
+    // ---------------------------------------------------------------------------------------------------
+    // ----- Compare string ----- end
+
+    // ----- Substring ----- begin
+    // ---------------------------------------------------------------------------------------------------
+    /**
+     * <p>从指定位置开始截取子串。</p>
+     *
+     * <p>负的起始位置表示从末尾开始倒数多少个字符。</p>
+     *
+     * <p>null 返回 {@code null}，空串 返回 空串。</p>
+     *
+     * <pre>
+     * StringAide.substring(null, *)   = null
+     * StringAide.substring("", *)     = ""
+     * StringAide.substring("abc", 0)  = "abc"
+     * StringAide.substring("abc", 2)  = "c"
+     * StringAide.substring("abc", 4)  = ""
+     * StringAide.substring("abc", -2) = "bc"
+     * StringAide.substring("abc", -4) = "abc"
+     * </pre>
+     *
+     * @param string 源字符串
+     * @param begin 起始位置，负数意味着从字符串末尾倒数这么多个字符
+     * @return 起始范围内的子串，若源字符串为 null 则返回 {@code null}
+     * @since 1.0.0
+     */
     public static String substring(final String string, int begin) {
         if (string == null) {
             return null;
@@ -527,7 +674,30 @@ public class StringAide extends CharSequenceAide {
         return string.substring(begin);
     }
 
-    // TODO comments
+    /**
+     * <p>从指定字符串中获取子串。</p>
+     *
+     * <p>返回的子串以 {@code begin} 位置的字符开头，在 {@code end} 之前结束。
+     * 负的起始位置可用于指定相对于字符串结尾的偏移量（详见参数列表）。</p>
+     *
+     * <pre>
+     * StringAide.substring(null, *, *)    = null
+     * StringAide.substring("", * ,  *)    = "";
+     * StringAide.substring("abc", 0, 2)   = "ab"
+     * StringAide.substring("abc", 2, 0)   = ""
+     * StringAide.substring("abc", 2, 4)   = "c"
+     * StringAide.substring("abc", 4, 6)   = ""
+     * StringAide.substring("abc", 2, 2)   = ""
+     * StringAide.substring("abc", -2, -1) = "b"
+     * StringAide.substring("abc", -4, 2)  = "ab"
+     * </pre>
+     *
+     * @param string 源字符串
+     * @param begin 起始位置，负数意味着从字符串末尾倒数这么多个字符
+     * @param end 结束位置，负数意味着从字符串末尾倒数这么多个字符
+     * @return 起始范围内的子串，若源字符串为 null 则返回 {@code null}
+     * @since 1.0.0
+     */
     public static String substring(final String string, int begin, int end) {
         if (string == null) {
             return null;
@@ -536,14 +706,8 @@ public class StringAide extends CharSequenceAide {
         if (end < 0) {
             end = string.length() + end;
         }
-        if (end < 0) {
-            end = 0;
-        }
         if (begin < 0) {
             begin = string.length() + begin;
-        }
-        if (begin < 0) {
-            begin = 0;
         }
 
         if (end > string.length()) {
@@ -554,6 +718,15 @@ public class StringAide extends CharSequenceAide {
             return EMPTY;
         }
 
+        if (begin < 0) {
+            begin = 0;
+        }
+        if (end < 0) {
+            end = 0;
+        }
+
         return string.substring(begin, end);
     }
+    // ---------------------------------------------------------------------------------------------------
+    // ----- Substring ----- begin
 }
