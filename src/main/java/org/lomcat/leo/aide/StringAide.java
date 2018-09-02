@@ -310,106 +310,178 @@ public class StringAide extends CharSequenceAide {
     // ---------------------------------------------------------------------------------------------------
     // ----- Strip string ----- end
 
-    // ----- Cull string ----- begin
+    // ----- Delete/Remove ----- begin
     // ---------------------------------------------------------------------------------------------------
+    // TODO delete comment
+    public static String delete(final String string, final char deleteChar) {
+        return delete(string, String.valueOf(deleteChar));
+    }
+
+    // TODO deleteIgnoreCase comment
+    public static String deleteIgnoreCase(final String string, final char deleteChar) {
+        return deleteIgnoreCase(string, String.valueOf(deleteChar));
+    }
+
     /**
-     * <p>从字符串中剔除指定的一组字符。</p>
+     * <p>从字符串中删除指定的一组字符。</p>
      *
      * <p>注意：</p>
      * <ul>
      *     <li>当 {@code string} 为 null 时返回 {@code null}，空串时返回空串。</li>
-     *     <li>当 {@code cullChars} 为 null 时，则按 {@link Character#isWhitespace(char) 的定义来剔除空白符。</li>
-     *     <li>当 {@code cullChars} 为空串时，直接返回源字符串 {@code string}。</li>
+     *     <li>当 {@code deleteChars} 为 null 时，则按 {@link Character#isWhitespace(char) 的定义来剔除空白符。</li>
+     *     <li>当 {@code deleteChars} 为空串时，直接返回源字符串 {@code string}。</li>
      * </ul>
      *
      * <pre>
-     * StringAide.cull(null, *)               = null
-     * StringAide.cull("", *)                 = ""
-     * StringAide.cull("  ab c", "")          = "  ab c"
-     * StringAide.cull("abxcxdexfg  ", "xde") = "abcfg  "
-     * StringAide.cull("abc", null)           = "abc"
-     * StringAide.cull("  ab c  ", null)      = "abc"
+     * StringAide.delete(null, *)               = null
+     * StringAide.delete("", *)                 = ""
+     * StringAide.delete("  ab c", "")          = "  ab c"
+     * StringAide.delete("abxcxdexfg  ", "xde") = "abcfg  "
+     * StringAide.delete("abc", null)           = "abc"
+     * StringAide.delete("  ab c  ", null)      = "abc"
      * </pre>
      *
      * @param string 源字符串，可以为 null
-     * @param cullChars 要剔除的字符集，null 作为 {@link Character#isWhitespace(char) 定义的空白符处理
-     * @return 剔除指定字符后的字符串
+     * @param deleteChars 要剔除的字符集，null 作为 {@link Character#isWhitespace(char) 定义的空白符处理
+     * @return 删除指定字符后的字符串
      * @since 1.0.0
      */
-    public static String cull(final String string, final String cullChars) {
+    public static String delete(final String string, final String deleteChars) {
+        return delete(string, deleteChars, false);
+    }
+
+    /**
+     * <p>从字符串中删除指定的一组字符，忽略大小写（无论大写小写都删除）。</p>
+     *
+     * <p>注意：</p>
+     * <ul>
+     *     <li>当 {@code string} 为 null 时返回 {@code null}，空串时返回空串。</li>
+     *     <li>当 {@code deleteChars} 为 null 时，则按 {@link Character#isWhitespace(char) 的定义来剔除空白符。</li>
+     *     <li>当 {@code deleteChars} 为空串时，直接返回源字符串 {@code string}。</li>
+     * </ul>
+     *
+     * <pre>
+     * StringAide.deleteIgnoreCase(null, *)               = null
+     * StringAide.deleteIgnoreCase("", *)                 = ""
+     * StringAide.deleteIgnoreCase("  ab c", "")          = "  ab c"
+     * StringAide.deleteIgnoreCase("abxcxdexfg  ", "xde") = "abcfg  "
+     * StringAide.deleteIgnoreCase("abc", null)           = "abc"
+     * StringAide.deleteIgnoreCase("  ab c  ", null)      = "abc"
+     * </pre>
+     *
+     * @param string 源字符串，可以为 null
+     * @param deleteChars 要剔除的字符集，null 作为 {@link Character#isWhitespace(char) 定义的空白符处理
+     * @return 删除指定字符后的字符串
+     * @since 1.0.0
+     */
+    public static String deleteIgnoreCase(final String string, final String deleteChars) {
+        return delete(string, deleteChars, true);
+    }
+
+    /**
+     * <p>从字符串中删除所有按 {@link Character#isWhitespace(char)} 定义的空白符。</p>
+     *
+     * <pre>
+     * StringAide.deleteWhitespace(null)        = null
+     * StringAide.deleteWhitespace("")          = ""
+     * StringAide.deleteWhitespace("  ab c  ")  = "abc"
+     * </pre>
+     *
+     * @param string 源字符串，可以为 null
+     * @return 删除所有空白符之后的字符串
+     * @since 1.0.0
+     */
+    public static String deleteWhitespace(final String string) {
+        return delete(string, null, false);
+    }
+
+    /**
+     * <p>从字符串中删除指定的一组字符。可以指定是否忽略大小写</p>
+     *
+     * <p>注意：</p>
+     * <ul>
+     *     <li>当 {@code string} 为 null 时返回 {@code null}，空串时返回空串。</li>
+     *     <li>当 {@code deleteChars} 为 null 时，则按 {@link Character#isWhitespace(char) 的定义来剔除空白符。</li>
+     *     <li>当 {@code deleteChars} 为空串时，直接返回源字符串 {@code string}。</li>
+     * </ul>
+     *
+     * @param string 源字符串，可以为 null
+     * @param deleteChars 要剔除的字符集，null 作为 {@link Character#isWhitespace(char) 定义的空白符处理
+     * @param ignoreCase 是否忽略大小写，true：无论大小写都删除；false：只删除大小写匹配的
+     * @return 删除指定字符后的字符串
+     * @since 1.0.0
+     */
+    private static String delete(final String string, final String deleteChars, boolean ignoreCase) {
         int length;
         if (string == null || (length = string.length()) == 0) {
             return string;
         }
-        if (cullChars == null) {
+        if (deleteChars == null) {
             StringBuilder builder = new StringBuilder();
             for (int i = 0; i < length; i++) {
-                char c = string.charAt(i);
-                if (!Character.isWhitespace(c)) {
-                    builder.append(c);
+                char ch = string.charAt(i);
+                if (!Character.isWhitespace(ch)) {
+                    builder.append(ch);
                 }
             }
             return builder.toString();
-        } else if (cullChars.isEmpty()) {
+        } else if (deleteChars.isEmpty()) {
             return string;
         } else {
             StringBuilder builder = new StringBuilder();
             for (int i = 0; i < length; i++) {
-                char c = string.charAt(i);
-                if (cullChars.indexOf(c) == INDEX_NOT_FOUND) {
-                    builder.append(c);
+                char ch = string.charAt(i);
+                if (ignoreCase) {
+                    if (indexOfIgnoreCase(deleteChars, String.valueOf(ch)) >= 0) {
+                        continue;
+                    }
+                } else {
+                    if (deleteChars.indexOf(ch) >= 0) {
+                        continue;
+                    }
                 }
+                builder.append(ch);
             }
             return builder.toString();
         }
     }
 
-    /**
-     * <p>从字符串中剔除所有按 {@link Character#isWhitespace(char)} 定义的空白符。</p>
-     *
-     * <pre>
-     * StringAide.cull(null)        = null
-     * StringAide.cull("")          = ""
-     * StringAide.cull("  ab c  ")  = "abc"
-     * </pre>
-     *
-     * @param string 源字符串，可以为 null
-     * @return 剔除所有空白符之后的字符串
-     * @since 1.0.0
-     */
-    public static String cull(final String string) {
-        return cull(string, null);
+    // TODO comment
+    public static String deleteLeft(final String string, final String delete) {
+        return null; // TODO deleteLeft
     }
 
-    /**
-     * <p>从字符串中剔除所有按 {@link Character#isWhitespace(char)} 定义的空白符。
-     * 当结果为 null 或 空串 时，返回 {@code null}。</p>
-     *
-     * @param string 源字符串，可以为 null
-     * @return 去掉所有空白符之后的字符串，或 {@code null}
-     * @since 1.0.0
-     */
-    public static String cullToNull(String string) {
-        if (isEmpty(string)) {
-            return null;
-        }
-        string = cull(string);
-        return string.isEmpty() ? null : string;
+    // TODO comment
+    public static String deleteLeftIgnoreCase(final String string, final String delete) {
+        return null; // TODO deleteLeftIgnoreCase
     }
 
-    /**
-     * <p>从字符串中剔除所有按 {@link Character#isWhitespace(char)} 定义的空白符。
-     * 当结果为 null 或 空串 时，返回 空串。</p>
-     *
-     * @param string 源字符串，可以为 null
-     * @return 去掉所有空白符之后的字符串，或 空串
-     * @since 1.0.0
-     */
-    public static String cullToEmpty(String string) {
-        return string == null ? EMPTY : cull(string);
+    // TODO comment
+    public static String deleteRight(final String string, final String delete) {
+        return null; // TODO deleteRight
+    }
+
+    // TODO comment
+    public static String deleteRightIgnoreCase(final String string, final String delete) {
+        return null; // TODO deleteRightIgnoreCase
+    }
+
+    // TODO comment
+    public static String deleteWhole(final String string, final String... wholes) {
+        return null; // TODO deleteWhole
+    }
+
+    // TODO comment
+    public static String deleteWholeIgnoreCase(final String string, final String... wholes) {
+        return null; // TODO deleteWholeIgnoreCase
+    }
+
+    // TODO comment
+    public static String deleteWhole(final boolean ignoreCase, final String string, final String... wholes) {
+        return null; // TODO deleteWhole
     }
     // ---------------------------------------------------------------------------------------------------
-    // ----- Cull string ----- end
+    // ----- Delete/Remove ----- end
 
     // ----- Truncate string ----- begin
     // ---------------------------------------------------------------------------------------------------
