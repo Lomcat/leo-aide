@@ -29,6 +29,8 @@ import java.lang.reflect.Array;
  */
 public class ArrayAide {
 
+    public static final String[] EMPTY_STRING_ARRAY = new String[0];
+
     public static boolean isEmpty(final Object[] array) {
         return length(array) == 0;
     }
@@ -53,5 +55,9 @@ public class ArrayAide {
             return 0;
         }
         return Array.getLength(array);
+    }
+
+    public static String[] newStringArray() {
+        return new String[0];
     }
 }
