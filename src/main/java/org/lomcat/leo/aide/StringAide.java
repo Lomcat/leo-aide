@@ -25,7 +25,18 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 /**
- * TODO Kweny StringAide
+ * <p>{@code null} 安全的字符串处理工具。</p>
+ *
+ * <p>
+ * {@code StringAide} 定义了一些与字符串处理相关的术语——
+ * <ul>
+ *     <li>null - null</li>
+ *     <li>empty / 空串 - 零长度的字符串（{@code ""}）</li>
+ *     <li>space / 空格 - 空格字符（{@code ' '}）</li>
+ *     <li>whitespace / 空白符 - 由 {@link Character#isWhitespace(char)} 定义的字符</li>
+ *     <li>trim - int 值 {@code <= 32} （{@code <= '\u005Cu0020'}，即空格）的字符，和 {@link String#trim()} 中定义的一样</li>
+ * </ul>
+ * </p>
  *
  * @author Kweny
  * @since 1.0.0
