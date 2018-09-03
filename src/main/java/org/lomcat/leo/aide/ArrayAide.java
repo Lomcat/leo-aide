@@ -119,4 +119,28 @@ public class ArrayAide {
     public static boolean contains(final int[] array, final int value) {
         return indexOf(array, value) != INDEX_NOT_FOUND;
     }
+
+    public static <T> T[] subArray(final T[] array, int startIndexInclusive, int endIndexExclusive) {
+        if (array == null) {
+            return null;
+        }
+        if (startIndexInclusive < 0) {
+            startIndexInclusive = 0;
+        }
+        if (endIndexExclusive > array.length) {
+            endIndexExclusive = array.length;
+        }
+        final int newLength = endIndexExclusive - startIndexInclusive;
+        final Class<?> type = array.getClass().getComponentType();
+        if (newLength <= 0) {
+            @SuppressWarnings("unchecked") // 这里是安全的，因为 array 就是 T 类型
+            final T[] emptyArray = (T[]) Array.newInstance(type, 0);
+            return emptyArray;
+        }
+        @SuppressWarnings("unchecked") // 这里是安全的，因为 array 就是 T 类型
+        final T[] subArray = (T[]) Array.newInstance(type, newLength);
+        System.arraycopy(array, startIndexInclusive, subArray, 0, newLength);
+        return subArray;
+    }
+
 }

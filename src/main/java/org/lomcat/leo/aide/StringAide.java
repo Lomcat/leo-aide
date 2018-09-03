@@ -321,19 +321,122 @@ public class StringAide extends CharSequenceAide {
     // ---------------------------------------------------------------------------------------------------
     // ----- Strip string ----- end
 
+    // ----- Truncate string ----- start
+    // ---------------------------------------------------------------------------------------------------
+    /**
+     * <p>从指定位置开始截取指定长度的字符串。</p>
+     *
+     * <p>注意：</p>
+     * <ul>
+     *     <li>如果源字符串 {@code string} 或者 {@code maxLength} 小于 0，则返回 {@code null}。</li>
+     *     <li>如果 {@code offset} 小于 0 则从 {@code string} 的起始位置开始截取。</li>
+     *     <li>如果 {@code offset} 大于 {@code string} 的长度，则返回一个空串。</li>
+     *     <li>如果 {@code maxLength} 大于 {@code string} 的长度，则截取到最后。</li>
+     * </ul>
+     *
+     * <pre>
+     * StringAide.truncate(null, 0, 0) = null
+     * StringAide.truncate(null, 2, 4) = null
+     * StringAide.truncate("", 0, 10) = ""
+     * StringAide.truncate("", 2, 10) = ""
+     * StringAide.truncate("abcdefghij", 0, 3) = "abc"
+     * StringAide.truncate("abcdefghij", 5, 6) , "fghij"
+     * StringAide.truncate("raspberry peach", 10, 15) = "peach"
+     * StringAide.truncate("abcdefghijklmno", 0, 10) = "abcdefghij"
+     * StringAide.truncate("abcdefghijklmno", -1, 10) = "abcdefghij"
+     * StringAide.truncate("abcdefghijklmno", Integer.MIN_VALUE, 10) = "abcdefghij"
+     * StringAide.truncate("abcdefghijklmno", Integer.MIN_VALUE, Integer.MAX_VALUE) = "abcdefghijklmno"
+     * StringAide.truncate("abcdefghijklmno", 0, Integer.MAX_VALUE) = "abcdefghijklmno"
+     * StringAide.truncate("abcdefghijklmno", 1, 10) = "bcdefghijk"
+     * StringAide.truncate("abcdefghijklmno", 2, 10) = "cdefghijkl"
+     * StringAide.truncate("abcdefghijklmno", 3, 10) = "defghijklm"
+     * StringAide.truncate("abcdefghijklmno", 4, 10) = "efghijklmn"
+     * StringAide.truncate("abcdefghijklmno", 5, 10) = "fghijklmno"
+     * StringAide.truncate("abcdefghijklmno", 5, 5) = "fghij"
+     * StringAide.truncate("abcdefghijklmno", 5, 3) = "fgh"
+     * StringAide.truncate("abcdefghijklmno", 10, 3) = "klm"
+     * StringAide.truncate("abcdefghijklmno", 10, Integer.MAX_VALUE) = "klmno"
+     * StringAide.truncate("abcdefghijklmno", 13, 1) = "n"
+     * StringAide.truncate("abcdefghijklmno", 13, Integer.MAX_VALUE) = "no"
+     * StringAide.truncate("abcdefghijklmno", 14, 1) = "o"
+     * StringAide.truncate("abcdefghijklmno", 14, Integer.MAX_VALUE) = "o"
+     * StringAide.truncate("abcdefghijklmno", 15, 1) = ""
+     * StringAide.truncate("abcdefghijklmno", 15, Integer.MAX_VALUE) = ""
+     * StringAide.truncate("abcdefghijklmno", Integer.MAX_VALUE, Integer.MAX_VALUE) = ""
+     * StringAide.truncate("abcdefghij", 3, -1) = null
+     * StringAide.truncate("abcdefghij", -2, 4) = "abcd"
+     * </pre>
+     *
+     * @param string 要截断的字符串，可以为 null
+     * @param offset 左偏移量
+     * @param maxLength 要截取的最大长度
+     * @return 截取到的字符串，若 {@code string} 为 null 或 {@code maxLength} 小于 0 时返回 {@code null}
+     * @since 1.0.0
+     */
+    public static String truncate(final String string, int offset, int maxLength) {
+        if (string == null || maxLength < 0) {
+            return null;
+        }
+        offset = Math.max(offset, 0);
+        if (offset > string.length()) {
+            return EMPTY;
+        }
+        if (maxLength < string.length()) {
+            int endIndex = Math.min(offset + maxLength, string.length());
+            return string.substring(offset, endIndex);
+        }
+        return string.substring(offset);
+    }
+
+    /**
+     * <p>截取指定长度的字符串。</p>
+     *
+     * <p>注意：</p>
+     * <ul>
+     *     <li>如果源字符串 {@code string} 或者 {@code maxLength} 小于 0，则返回 {@code null}。</li>
+     *     <li>如果 {@code maxLength} 大于 {@code string} 的长度，则截取到最后。</li>
+     * </ul>
+     *
+     * <pre>
+     * StringAide.truncate(null, 0) = null
+     * StringAide.truncate(null, 2) = null
+     * StringAide.truncate("", 4) = ""
+     * StringAide.truncate("abcdefg", 4) = "abcd"
+     * StringAide.truncate("abcdefg", 6) = "abcdef"
+     * StringAide.truncate("abcdefg", 7) = "abcdefg"
+     * StringAide.truncate("abcdefg", 8) = "abcdefg"
+     * StringAide.truncate("abcdefg", -1) = null
+     * </pre>
+     *
+     * @param string 要截断的字符串，可以为 null
+     * @param maxLength 要截取的最大长度
+     * @return 截取到的字符串，若 {@code string} 为 null 或 {@code maxLength} 小于 0 时返回 {@code null}
+     * @since 1.0.0
+     */
+    public static String truncate(final String string, int maxLength) {
+        return truncate(string, 0, maxLength);
+    }
+    // ---------------------------------------------------------------------------------------------------
+    // ----- Truncate string ----- end
+
     // ----- Delete ----- start
     // ---------------------------------------------------------------------------------------------------
-    // TODO delete string
-    public static String delete(final String string, final String... substrings) {
-        return null; // TODO delete
+    // TODO comment
+    public static String delete(final String string, final String deleteString) {
+        return delete(string, deleteString, false);
     }
 
-    public static String deleteIgnoreCase(final String string, final String... substrings) {
-        return null; // TODO deleteIgnoreCase
+    // TODO comment
+    public static String deleteIgnoreCase(final String string, final String deleteString) {
+        return delete(string, deleteString, true);
     }
 
+    // TODO comment
     private static String delete(final String string, final String deleteString, final boolean ignoreCase) {
-        return null; // TODO delete with ignoreCase
+        if (isEmpty(string) || isEmpty(deleteString)) {
+            return string;
+        }
+        return replace(string, deleteString, EMPTY, -1, ignoreCase);
     }
 
     /**
@@ -403,12 +506,12 @@ public class StringAide extends CharSequenceAide {
      * </ul>
      *
      * <pre>
-     * StringAide.delete(null, *)               = null
-     * StringAide.delete("", *)                 = ""
-     * StringAide.delete("  ab c", "")          = "  ab c"
-     * StringAide.delete("abxcxdexfg  ", "xde") = "abcfg  "
-     * StringAide.delete("abc", null)           = "abc"
-     * StringAide.delete("  ab c  ", null)      = "abc"
+     * StringAide.deleteChars(null, *)               = null
+     * StringAide.deleteChars("", *)                 = ""
+     * StringAide.deleteChars("  ab c", "")          = "  ab c"
+     * StringAide.deleteChars("abxcxdexfg  ", "xde") = "abcfg  "
+     * StringAide.deleteChars("abc", null)           = "abc"
+     * StringAide.deleteChars("  ab c  ", null)      = "abc"
      * </pre>
      *
      * @param string 源字符串，可以为 null
@@ -646,103 +749,532 @@ public class StringAide extends CharSequenceAide {
     // ---------------------------------------------------------------------------------------------------
     // ----- Delete ----- end
 
-    // ----- Truncate string ----- start
+    // ----- Replace ----- start
     // ---------------------------------------------------------------------------------------------------
     /**
-     * <p>从指定位置开始截取指定长度的字符串。</p>
-     *
-     * <p>注意：</p>
-     * <ul>
-     *     <li>如果源字符串 {@code string} 或者 {@code maxLength} 小于 0，则返回 {@code null}。</li>
-     *     <li>如果 {@code offset} 小于 0 则从 {@code string} 的起始位置开始截取。</li>
-     *     <li>如果 {@code offset} 大于 {@code string} 的长度，则返回一个空串。</li>
-     *     <li>如果 {@code maxLength} 大于 {@code string} 的长度，则截取到最后。</li>
-     * </ul>
+     * <p>替换文本中的字符串，只替换一次。</p>
      *
      * <pre>
-     * StringAide.truncate(null, 0, 0) = null
-     * StringAide.truncate(null, 2, 4) = null
-     * StringAide.truncate("", 0, 10) = ""
-     * StringAide.truncate("", 2, 10) = ""
-     * StringAide.truncate("abcdefghij", 0, 3) = "abc"
-     * StringAide.truncate("abcdefghij", 5, 6) , "fghij"
-     * StringAide.truncate("raspberry peach", 10, 15) = "peach"
-     * StringAide.truncate("abcdefghijklmno", 0, 10) = "abcdefghij"
-     * StringAide.truncate("abcdefghijklmno", -1, 10) = "abcdefghij"
-     * StringAide.truncate("abcdefghijklmno", Integer.MIN_VALUE, 10) = "abcdefghij"
-     * StringAide.truncate("abcdefghijklmno", Integer.MIN_VALUE, Integer.MAX_VALUE) = "abcdefghijklmno"
-     * StringAide.truncate("abcdefghijklmno", 0, Integer.MAX_VALUE) = "abcdefghijklmno"
-     * StringAide.truncate("abcdefghijklmno", 1, 10) = "bcdefghijk"
-     * StringAide.truncate("abcdefghijklmno", 2, 10) = "cdefghijkl"
-     * StringAide.truncate("abcdefghijklmno", 3, 10) = "defghijklm"
-     * StringAide.truncate("abcdefghijklmno", 4, 10) = "efghijklmn"
-     * StringAide.truncate("abcdefghijklmno", 5, 10) = "fghijklmno"
-     * StringAide.truncate("abcdefghijklmno", 5, 5) = "fghij"
-     * StringAide.truncate("abcdefghijklmno", 5, 3) = "fgh"
-     * StringAide.truncate("abcdefghijklmno", 10, 3) = "klm"
-     * StringAide.truncate("abcdefghijklmno", 10, Integer.MAX_VALUE) = "klmno"
-     * StringAide.truncate("abcdefghijklmno", 13, 1) = "n"
-     * StringAide.truncate("abcdefghijklmno", 13, Integer.MAX_VALUE) = "no"
-     * StringAide.truncate("abcdefghijklmno", 14, 1) = "o"
-     * StringAide.truncate("abcdefghijklmno", 14, Integer.MAX_VALUE) = "o"
-     * StringAide.truncate("abcdefghijklmno", 15, 1) = ""
-     * StringAide.truncate("abcdefghijklmno", 15, Integer.MAX_VALUE) = ""
-     * StringAide.truncate("abcdefghijklmno", Integer.MAX_VALUE, Integer.MAX_VALUE) = ""
-     * StringAide.truncate("abcdefghij", 3, -1) = null
-     * StringAide.truncate("abcdefghij", -2, 4) = "abcd"
+     * StringUtils.replaceOnce(null, *, *)        = null
+     * StringUtils.replaceOnce("", *, *)          = ""
+     * StringUtils.replaceOnce("any", null, *)    = "any"
+     * StringUtils.replaceOnce("any", *, null)    = "any"
+     * StringUtils.replaceOnce("any", "", *)      = "any"
+     * StringUtils.replaceOnce("aba", "a", null)  = "aba"
+     * StringUtils.replaceOnce("aba", "a", "")    = "ba"
+     * StringUtils.replaceOnce("aba", "a", "z")   = "zba"
      * </pre>
      *
-     * @param string 要截断的字符串，可以为 null
-     * @param offset 左偏移量
-     * @param maxLength 要截取的最大长度
-     * @return 截取到的字符串，若 {@code string} 为 null 或 {@code maxLength} 小于 0 时返回 {@code null}
+     * @param text  源文本
+     * @param searchString  要搜索的字符串
+     * @param replacement  要替换的字符串
+     * @return 进行替换操作后的文本
      * @since 1.0.0
      */
-    public static String truncate(final String string, int offset, int maxLength) {
-        if (string == null || maxLength < 0) {
-            return null;
-        }
-        offset = Math.max(offset, 0);
-        if (offset > string.length()) {
-            return EMPTY;
-        }
-        if (maxLength < string.length()) {
-            int endIndex = Math.min(offset + maxLength, string.length());
-            return string.substring(offset, endIndex);
-        }
-        return string.substring(offset);
+    public static String replaceOnce(final String text, final String searchString, final String replacement) {
+        return replace(text, searchString, replacement, 1);
     }
 
     /**
-     * <p>截取指定长度的字符串。</p>
-     *
-     * <p>注意：</p>
-     * <ul>
-     *     <li>如果源字符串 {@code string} 或者 {@code maxLength} 小于 0，则返回 {@code null}。</li>
-     *     <li>如果 {@code maxLength} 大于 {@code string} 的长度，则截取到最后。</li>
-     * </ul>
+     * <p>替换文本中的字符串，只替换一次，忽略大小写。</p>
      *
      * <pre>
-     * StringAide.truncate(null, 0) = null
-     * StringAide.truncate(null, 2) = null
-     * StringAide.truncate("", 4) = ""
-     * StringAide.truncate("abcdefg", 4) = "abcd"
-     * StringAide.truncate("abcdefg", 6) = "abcdef"
-     * StringAide.truncate("abcdefg", 7) = "abcdefg"
-     * StringAide.truncate("abcdefg", 8) = "abcdefg"
-     * StringAide.truncate("abcdefg", -1) = null
+     * StringUtils.replaceOnceIgnoreCase(null, *, *)        = null
+     * StringUtils.replaceOnceIgnoreCase("", *, *)          = ""
+     * StringUtils.replaceOnceIgnoreCase("any", null, *)    = "any"
+     * StringUtils.replaceOnceIgnoreCase("any", *, null)    = "any"
+     * StringUtils.replaceOnceIgnoreCase("any", "", *)      = "any"
+     * StringUtils.replaceOnceIgnoreCase("aba", "a", null)  = "aba"
+     * StringUtils.replaceOnceIgnoreCase("aba", "a", "")    = "ba"
+     * StringUtils.replaceOnceIgnoreCase("aba", "a", "z")   = "zba"
+     * StringUtils.replaceOnceIgnoreCase("FoOFoofoo", "foo", "") = "Foofoo"
      * </pre>
      *
-     * @param string 要截断的字符串，可以为 null
-     * @param maxLength 要截取的最大长度
-     * @return 截取到的字符串，若 {@code string} 为 null 或 {@code maxLength} 小于 0 时返回 {@code null}
+     * @param text  源文本
+     * @param searchString  要搜索的字符串，忽略大小写
+     * @param replacement  要替换的字符串
+     * @return 进行替换操作后的文本
      * @since 1.0.0
      */
-    public static String truncate(final String string, int maxLength) {
-        return truncate(string, 0, maxLength);
+    public static String replaceOnceIgnoreCase(final String text, final String searchString, final String replacement) {
+        return replaceIgnoreCase(text, searchString, replacement, 1);
+    }
+
+    /**
+     * <p>替换文本中的字符串。</p>
+     *
+     * <pre>
+     * StringUtils.replace(null, *, *)        = null
+     * StringUtils.replace("", *, *)          = ""
+     * StringUtils.replace("any", null, *)    = "any"
+     * StringUtils.replace("any", *, null)    = "any"
+     * StringUtils.replace("any", "", *)      = "any"
+     * StringUtils.replace("aba", "a", null)  = "aba"
+     * StringUtils.replace("aba", "a", "")    = "b"
+     * StringUtils.replace("aba", "a", "z")   = "zbz"
+     * </pre>
+     *
+     * @param text  源文本
+     * @param searchString  要搜索的字符串
+     * @param replacement  要替换的字符串
+     * @return 进行替换操作后的文本
+     * @since 1.0.0
+     */
+    public static String replace(final String text, final String searchString, final String replacement) {
+        return replace(text, searchString, replacement, -1);
+    }
+
+    /**
+     * <p>替换文本中的字符串，忽略大小写。</p>
+     *
+     * <pre>
+     * StringUtils.replaceIgnoreCase(null, *, *)        = null
+     * StringUtils.replaceIgnoreCase("", *, *)          = ""
+     * StringUtils.replaceIgnoreCase("any", null, *)    = "any"
+     * StringUtils.replaceIgnoreCase("any", *, null)    = "any"
+     * StringUtils.replaceIgnoreCase("any", "", *)      = "any"
+     * StringUtils.replaceIgnoreCase("aba", "a", null)  = "aba"
+     * StringUtils.replaceIgnoreCase("abA", "A", "")    = "b"
+     * StringUtils.replaceIgnoreCase("aba", "A", "z")   = "zbz"
+     * </pre>
+     *
+     * @param text  源文本
+     * @param searchString  要搜索的字符串，忽略大小写
+     * @param replacement  要替换的字符串
+     * @return 进行替换操作后的文本
+     * @since 1.0.0
+     */
+    public static String replaceIgnoreCase(final String text, final String searchString, final String replacement) {
+        return replaceIgnoreCase(text, searchString, replacement, -1);
+    }
+
+    /**
+     * <p>替换文本中的字符串，可以指定最大替换数。</p>
+     *
+     * <pre>
+     * StringUtils.replace(null, *, *, *)         = null
+     * StringUtils.replace("", *, *, *)           = ""
+     * StringUtils.replace("any", null, *, *)     = "any"
+     * StringUtils.replace("any", *, null, *)     = "any"
+     * StringUtils.replace("any", "", *, *)       = "any"
+     * StringUtils.replace("any", *, *, 0)        = "any"
+     * StringUtils.replace("abaa", "a", null, -1) = "abaa"
+     * StringUtils.replace("abaa", "a", "", -1)   = "b"
+     * StringUtils.replace("abaa", "a", "z", 0)   = "abaa"
+     * StringUtils.replace("abaa", "a", "z", 1)   = "zbaa"
+     * StringUtils.replace("abaa", "a", "z", 2)   = "zbza"
+     * StringUtils.replace("abaa", "a", "z", -1)  = "zbzz"
+     * </pre>
+     *
+     * @param text  源文本
+     * @param searchString  要搜索的字符串
+     * @param replacement  要替换的字符串
+     * @param max  最大替换数，或 {@code -1}
+     * @return 进行替换操作后的文本
+     * @since 1.0.0
+     */
+    public static String replace(final String text, final String searchString, final String replacement, final int max) {
+        return replace(text, searchString, replacement, max, false);
+    }
+
+    /**
+     * <p>替换文本中的字符串，可以指定最大替换数，忽略大小写。</p>
+     *
+     * <pre>
+     * StringUtils.replaceIgnoreCase(null, *, *, *)         = null
+     * StringUtils.replaceIgnoreCase("", *, *, *)           = ""
+     * StringUtils.replaceIgnoreCase("any", null, *, *)     = "any"
+     * StringUtils.replaceIgnoreCase("any", *, null, *)     = "any"
+     * StringUtils.replaceIgnoreCase("any", "", *, *)       = "any"
+     * StringUtils.replaceIgnoreCase("any", *, *, 0)        = "any"
+     * StringUtils.replaceIgnoreCase("abaa", "a", null, -1) = "abaa"
+     * StringUtils.replaceIgnoreCase("abaa", "a", "", -1)   = "b"
+     * StringUtils.replaceIgnoreCase("abaa", "a", "z", 0)   = "abaa"
+     * StringUtils.replaceIgnoreCase("abaa", "A", "z", 1)   = "zbaa"
+     * StringUtils.replaceIgnoreCase("abAa", "a", "z", 2)   = "zbza"
+     * StringUtils.replaceIgnoreCase("abAa", "a", "z", -1)  = "zbzz"
+     * </pre>
+     *
+     * @param text  源文本
+     * @param searchString  要搜索的字符串，忽略大小写
+     * @param replacement  要替换的字符串
+     * @param max  最多替换多少个搜索到的字符串，或 {@code -1}
+     * @return 进行替换操作后的文本
+     * @since 1.0.0
+     */
+    public static String replaceIgnoreCase(final String text, final String searchString, final String replacement, int max) {
+        return replace(text, searchString, replacement, max, true);
+    }
+
+    /**
+     * <p>替换文本中的字符串，可以指定最大替换数，可以指定是否忽略大小写。</p>
+     *
+     * <pre>
+     * StringUtils.replace(null, *, *, *, false)         = null
+     * StringUtils.replace("", *, *, *, false)           = ""
+     * StringUtils.replace("any", null, *, *, false)     = "any"
+     * StringUtils.replace("any", *, null, *, false)     = "any"
+     * StringUtils.replace("any", "", *, *, false)       = "any"
+     * StringUtils.replace("any", *, *, 0, false)        = "any"
+     * StringUtils.replace("abaa", "a", null, -1, false) = "abaa"
+     * StringUtils.replace("abaa", "a", "", -1, false)   = "b"
+     * StringUtils.replace("abaa", "a", "z", 0, false)   = "abaa"
+     * StringUtils.replace("abaa", "A", "z", 1, false)   = "abaa"
+     * StringUtils.replace("abaa", "A", "z", 1, true)   = "zbaa"
+     * StringUtils.replace("abAa", "a", "z", 2, true)   = "zbza"
+     * StringUtils.replace("abAa", "a", "z", -1, true)  = "zbzz"
+     * </pre>
+     *
+     * @param text  源文本
+     * @param searchString  要搜索的字符串，{@code ignoreCase} 为 true 时忽略大小写
+     * @param replacement  要替换的字符串
+     * @param max  最多替换多少个搜索到的字符串，或 {@code -1}
+     * @param ignoreCase true 不区分大小写，false 区分大小写
+     * @return 进行替换操作后的文本
+     * @since 1.0.0
+     */
+    private static String replace(final String text, String searchString, final String replacement,
+                                  int max, final boolean ignoreCase) {
+        if (isEmpty(text) || isEmpty(searchString) || replacement == null || max == 0) {
+            return text;
+        }
+        String searchText = text;
+        if (ignoreCase) {
+            searchText = text.toLowerCase();
+            searchString = searchString.toLowerCase();
+        }
+        int start = 0;
+        int end = searchText.indexOf(searchString, start);
+        if (end == INDEX_NOT_FOUND) {
+            return text;
+        }
+        final int searchLength = searchString.length();
+        int increase = replacement.length() - searchLength;
+        increase = increase < 0 ? 0 : increase;
+        increase *= max < 0 ? 16 : max > 64 ? 64 : max;
+        final StringBuilder builder = new StringBuilder(text.length() + increase);
+        while (end != INDEX_NOT_FOUND) {
+            builder.append(text, start, end).append(replacement);
+            start = end + searchLength;
+            if (--max == 0) {
+                break;
+            }
+            end = searchText.indexOf(searchString, start);
+        }
+        builder.append(text, start, text.length());
+        return builder.toString();
+    }
+
+    /**
+     * <p>替换 {@code text} 中出现的所有指定字符串。</p>
+     *
+     * <p>如果 {@code string} 为 null 或 空串，
+     * 或者 {@code searchStrings} 为 null 或 空数组，
+     * 或者 {@code replaceStrings} 为 null 或 空数组，
+     * 则将 {@code string} 直接返回。
+     * </p>
+     *
+     * <p>如果 {@code searches} 和 {@code replacements} 中相对应的一对 搜索字符串 和 替换字符串 任一为 null，则忽略该替换。</p>
+     *
+     * <p>通常 {@code searches} 和 {@code replacements} 的元素数量应该相等，
+     * 如果不等，以较小的数量为准，取相同数量的元素，额外的元素将被忽略，
+     * 如 {@code ["ab", "cd"]} 和 {@code ["12", "34", "56"]} 将被视为 {@code ["ab", "cd"]} 和 {@code ["12", "34"]}。</p>
+     *
+     * <pre>
+     *  StringUtils.replaceEach(null, *, *)        = null
+     *  StringUtils.replaceEach("", *, *)          = ""
+     *  StringUtils.replaceEach("aba", null, null) = "aba"
+     *  StringUtils.replaceEach("aba", new String[0], null) = "aba"
+     *  StringUtils.replaceEach("aba", null, new String[0]) = "aba"
+     *  StringUtils.replaceEach("aba", new String[]{"a"}, null)  = "aba"
+     *  StringUtils.replaceEach("aba", new String[]{"a"}, new String[]{""})  = "b"
+     *  StringUtils.replaceEach("aba", new String[]{null}, new String[]{"a"})  = "aba"
+     *  StringUtils.replaceEach("abcde", new String[]{"ab", "d"}, new String[]{"w", "t"})  = "wcte"
+     *  StringUtils.replaceEach("abcde", new String[]{"ab", "d"}, new String[]{"d", "t"})  = "dcte"
+     * </pre>
+     *
+     * @param text 源字符串
+     * @param searches 要搜索的字符串数组，其中的元素和 {@code replacements} 中的元素一一对应成“对”
+     * @param replacements 要替换的字符串数组，其中的元素和 {@code searches} 中的元素一一对应成“对”
+     * @return 替换处理后的字符串，如果输入字符串为 null 则返回 {@code null}
+     * @since 1.0.0
+     */
+    public static String replaceEach(final String text, final String[] searches, final String[] replacements) {
+        return replaceEach(text, searches, replacements, false, 0);
+    }
+
+    /**
+     * <p>替换 {@code text} 中出现的所有指定字符串。</p>
+     *
+     * <p>如果 {@code string} 为 null 或 空串，
+     * 或者 {@code searchStrings} 为 null 或 空数组，
+     * 或者 {@code replaceStrings} 为 null 或 空数组，
+     * 则将 {@code string} 直接返回。
+     * </p>
+     *
+     * <p>如果 {@code searches} 和 {@code replacements} 中相对应的一对 搜索字符串 和 替换字符串 任一为 null，则忽略该替换。</p>
+     *
+     * <p>通常 {@code searches} 和 {@code replacements} 的元素数量应该相等，
+     * 如果不等，以较小的数量为准，取相同数量的元素，额外的元素将被忽略，
+     * 如 {@code ["ab", "cd"]} 和 {@code ["12", "34", "56"]} 将被视为 {@code ["ab", "cd"]} 和 {@code ["12", "34"]}。</p>
+     *
+     * <pre>
+     *  StringUtils.replaceEachRepeatedly(null, *, *) = null
+     *  StringUtils.replaceEachRepeatedly("", *, *) = ""
+     *  StringUtils.replaceEachRepeatedly("aba", null, null) = "aba"
+     *  StringUtils.replaceEachRepeatedly("aba", new String[0], null) = "aba"
+     *  StringUtils.replaceEachRepeatedly("aba", null, new String[0]) = "aba"
+     *  StringUtils.replaceEachRepeatedly("aba", new String[]{"a"}, null) = "aba"
+     *  StringUtils.replaceEachRepeatedly("aba", new String[]{"a"}, new String[]{""}) = "b"
+     *  StringUtils.replaceEachRepeatedly("aba", new String[]{null}, new String[]{"a"}) = "aba"
+     *  StringUtils.replaceEachRepeatedly("abcde", new String[]{"ab", "d"}, new String[]{"w", "t"}) = "wcte"
+     *  （递归替换的示例）
+     *  StringUtils.replaceEachRepeatedly("abcde", new String[]{"ab", "d"}, new String[]{"d", "t"}) = "tcte"
+     *  StringUtils.replaceEachRepeatedly("abcde", new String[]{"ab", "d"}, new String[]{"d", "ab"}) = IllegalStateException
+     * </pre>
+     *
+     * @param text 源字符串
+     * @param searches 要搜索的字符串数组，其中的元素和 {@code replacements} 中的元素一一对应成“对”
+     * @param replacements 要替换的字符串数组，其中的元素和 {@code searches} 中的元素一一对应成“对”
+     * @return 替换处理后的字符串，如果输入字符串为 null 则返回 {@code null}
+     * @throws IllegalStateException 当可能出现无限递归时
+     * @since 1.0.0
+     */
+    public static String replaceEachRepeatedly(final String text, final String[] searches, final String[] replacements) {
+        final int timeToLive = Math.min(ArrayAide.length(searches), ArrayAide.length(replacements));
+        return replaceEach(text, searches, replacements, true, timeToLive);
+    }
+
+    /**
+     * <p>替换 {@code text} 中出现的所有指定字符串。
+     * 这是 {@link #replaceEachRepeatedly(String, String[], String[])} 和
+     * {@link #replaceEach(String, String[], String[])} 的递归辅助方法。
+     * </p>
+     *
+     * <p>如果 {@code string} 为 null 或 空串，
+     * 或者 {@code searchStrings} 为 null 或 空数组，
+     * 或者 {@code replaceStrings} 为 null 或 空数组，
+     * 则将 {@code string} 直接返回。
+     * </p>
+     *
+     * <p>如果 {@code searches} 和 {@code replacements} 中相对应的一对 搜索字符串 和 替换字符串 任一为 null，则忽略该替换。</p>
+     *
+     * <p>通常 {@code searches} 和 {@code replacements} 的元素数量应该相等，
+     * 如果不等，以较小的数量为准，取相同数量的元素，额外的元素将被忽略，
+     * 如 {@code ["ab", "cd"]} 和 {@code ["12", "34", "56"]} 将被视为 {@code ["ab", "cd"]} 和 {@code ["12", "34"]}。</p>
+     *
+     * <pre>
+     *  StringUtils.replaceEach(null, *, *, *, *) = null
+     *  StringUtils.replaceEach("", *, *, *, *) = ""
+     *  StringUtils.replaceEach("aba", null, null, *, *) = "aba"
+     *  StringUtils.replaceEach("aba", new String[0], null, *, *) = "aba"
+     *  StringUtils.replaceEach("aba", null, new String[0], *, *) = "aba"
+     *  StringUtils.replaceEach("aba", new String[]{"a"}, null, *, *) = "aba"
+     *  StringUtils.replaceEach("aba", new String[]{"a"}, new String[]{""}, *, >=0) = "b"
+     *  StringUtils.replaceEach("aba", new String[]{null}, new String[]{"a"}, *, >=0) = "aba"
+     *  StringUtils.replaceEach("abcde", new String[]{"ab", "d"}, new String[]{"w", "t"}, *, >=0) = "wcte"
+     *  （递归替换的示例）
+     *  StringUtils.replaceEach("abcde", new String[]{"ab", "d"}, new String[]{"d", "t"}, false, >=0) = "dcte"
+     *  StringUtils.replaceEach("abcde", new String[]{"ab", "d"}, new String[]{"d", "t"}, true, >=2) = "tcte"
+     *  StringUtils.replaceEach("abcde", new String[]{"ab", "d"}, new String[]{"d", "ab"}, *, *) = IllegalStateException
+     * </pre>
+     *
+     * @param text 源字符串
+     * @param searches 要搜索的字符串数组，其中的元素和 {@code replacements} 中的元素一一对应成“对”
+     * @param replacements 要替换的字符串数组，其中的元素和 {@code searches} 中的元素一一对应成“对”
+     * @param repeat 如果 true，则进行递归替换，直到没有可替换的“对”，或 {@code timeToLive < 0}
+     * @param timeToLive 随着递归递减，如果小于 0，则存在循环引用和无限递归
+     * @return 替换处理后的字符串，如果输入字符串为 null 则返回 {@code null}
+     * @throws IllegalStateException 如果开启重复搜索（{@code repeat} 为 true），且存在无限递归
+     * @since 1.0.0
+     */
+    private static String replaceEach(final String text, String[] searches, String[] replacements,
+                                      final boolean repeat, final int timeToLive) {
+        if (isEmpty(text) || ArrayAide.isEmpty(searches) || ArrayAide.isEmpty(replacements)) {
+            return text;
+        }
+
+        if (timeToLive < 0) {
+            throw new IllegalStateException("Aborting to protect against StackOverflowError - output of one loop is the input of another");
+        }
+
+        final int searchLength = searches.length;
+        final int replaceLength = replacements.length;
+
+        if (searchLength > replaceLength) {
+            searches = ArrayAide.subArray(searches, 0, replaceLength);
+        } else if (replaceLength > searchLength) {
+            replacements = ArrayAide.subArray(replacements, 0, searchLength);
+        }
+
+        final boolean[] noMoreMatchesForReplaceIndex = new boolean[searchLength];
+
+        int textIndex = -1;
+        int replaceIndex = -1;
+        int tempIndex;
+
+        for (int i = 0; i < searchLength; i++) {
+            if (noMoreMatchesForReplaceIndex[i] || isEmpty(searches[i]) || replacements[i] == null) {
+                continue;
+            }
+            tempIndex = text.indexOf(searches[i]);
+
+            if (tempIndex == -1) {
+                noMoreMatchesForReplaceIndex[i] = true;
+            } else {
+                if (textIndex == -1 || tempIndex < textIndex) {
+                    textIndex = tempIndex;
+                    replaceIndex = i;
+                }
+            }
+        }
+
+        if (textIndex == -1) {
+            return text;
+        }
+
+        int start = 0;
+        int increase = 0;
+
+        for (int i = 0; i < searches.length; i++) {
+            if (searches[i] == null || replacements[i] == null) {
+                continue;
+            }
+            final int grater = replacements[i].length() - searches[i].length();
+            if (grater > 0) {
+                increase += 3 * grater;
+            }
+        }
+
+        increase = Math.min(increase, text.length() / 3);
+
+        final StringBuilder builder = new StringBuilder(text.length() + increase);
+
+        while (textIndex != -1) {
+            for (int i = start; i < textIndex; i++) {
+                builder.append(text.charAt(i));
+            }
+            builder.append(replacements[replaceIndex]);
+
+            start = textIndex + searches[replaceIndex].length();
+
+            textIndex = -1;
+            replaceIndex = -1;
+
+            for (int i = 0; i < searchLength; i++) {
+                if (noMoreMatchesForReplaceIndex[i] || isEmpty(searches[i]) || replacements[i] == null) {
+                    continue;
+                }
+                tempIndex = text.indexOf(searches[i], start);
+
+                if (tempIndex == -1) {
+                    noMoreMatchesForReplaceIndex[i] = true;
+                } else {
+                    if (textIndex == -1 || tempIndex < textIndex) {
+                        textIndex = tempIndex;
+                        replaceIndex = i;
+                    }
+                }
+            }
+        }
+
+        final int textLength = text.length();
+        for (int i = start; i < textLength; i++) {
+            builder.append(text.charAt(i));
+        }
+        final String result = builder.toString();
+        if (!repeat) {
+            return result;
+        }
+
+        return replaceEach(result, searches, replacements, true, timeToLive - 1);
+    }
+
+    /**
+     * <p>将字符串中的字符 {@code searchChar} 替换为另一个字符 {@code replaceChar}。</p>
+     *
+     * <p>{@code string} 为 null 时返回 null，空串 时返回 空串。</p>
+     *
+     * <pre>
+     * StringUtils.replaceChars(null, *, *)        = null
+     * StringUtils.replaceChars("", *, *)          = ""
+     * StringUtils.replaceChars("abcba", 'b', 'y') = "aycya"
+     * StringUtils.replaceChars("abcba", 'z', 'y') = "abcba"
+     * </pre>
+     *
+     * @param string  源字符串，可能为 null
+     * @param searchChar  要搜索的字符
+     * @param replaceChar  要替换的字符
+     * @return 替换处理后的字符串，如果输入字符串为 null 则返回 {@code null}
+     * @since 1.0.0
+     */
+    public static String replaceChars(final String string, final char searchChar, final char replaceChar) {
+        if (string == null) {
+            return null;
+        }
+        return string.replace(searchChar, replaceChar);
+    }
+
+    /**
+     * <p>替换字符串中的多个字符，此方法也可用于删除字符。</p>
+     *
+     * <p>例如：<br>
+     * <code>replaceChars(&quot;hello&quot;, &quot;ho&quot;, &quot;jy&quot;) = jelly</code>.</p>
+     *
+     * <p>{@code string} 为 null 时返回 null，空串 时返回 空串。
+     * {@code searchChars} 为 null 或 空串 时直接返回 {@code string}。</p>
+     *
+     * <p>通常搜索字符 {@code searchChars} 应与替换字符 {@code replaceChars} 长度相等。
+     * 如果搜索字符较长，则删除额外的搜索字符，如果搜索字符较短，则忽略额外的替换字符。</p>
+     *
+     * <pre>
+     * StringUtils.replaceChars(null, *, *)           = null
+     * StringUtils.replaceChars("", *, *)             = ""
+     * StringUtils.replaceChars("abc", null, *)       = "abc"
+     * StringUtils.replaceChars("abc", "", *)         = "abc"
+     * StringUtils.replaceChars("abc", "b", null)     = "ac"
+     * StringUtils.replaceChars("abc", "b", "")       = "ac"
+     * StringUtils.replaceChars("abcba", "bc", "yz")  = "ayzya"
+     * StringUtils.replaceChars("abcba", "bc", "y")   = "ayya"
+     * StringUtils.replaceChars("abcba", "bc", "yzx") = "ayzya"
+     * </pre>
+     *
+     * @param string  源字符串，可能为 null
+     * @param searchChars  要搜索的一组字符，可能为 null
+     * @param replaceChars  要替换的一组字符，可能为 null
+     * @return 替换处理后的字符串，如果输入字符串为 null 则返回 {@code null}
+     * @since 1.0.0
+     */
+    public static String replaceChars(final String string, final String searchChars, String replaceChars) {
+        if (isEmpty(string) || isEmpty(searchChars)) {
+            return string;
+        }
+        if (replaceChars == null) {
+            replaceChars = EMPTY;
+        }
+        boolean modified = false;
+        final int replaceCharsLength = replaceChars.length();
+        final int stringLength = string.length();
+        final StringBuilder builder = new StringBuilder(stringLength);
+        for (int i = 0; i < stringLength; i++) {
+            final char ch = string.charAt(i);
+            final int index = searchChars.indexOf(ch);
+            if (index >= 0) {
+                modified = true;
+                if (index < replaceCharsLength) {
+                    builder.append(replaceChars.charAt(index));
+                }
+            } else {
+                builder.append(ch);
+            }
+        }
+        if (modified) {
+            return builder.toString();
+        }
+        return string;
     }
     // ---------------------------------------------------------------------------------------------------
-    // ----- Truncate string ----- end
+    // ----- Replace ----- end
 
     // ----- Compare string ----- start
     // ---------------------------------------------------------------------------------------------------
