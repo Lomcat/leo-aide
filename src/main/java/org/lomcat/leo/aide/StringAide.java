@@ -513,13 +513,13 @@ public class StringAide extends CharSequenceAide {
      * {@code deleteString} 为 null 或 空串 时直接返回 {@code string}。</p>
      *
      * <pre>
-     * StringUtils.deleteStart(null, *)      = null
-     * StringUtils.deleteStart("", *)        = ""
-     * StringUtils.deleteStart(*, null)      = *
-     * StringUtils.deleteStart("www.domain.com", "www.")   = "domain.com"
-     * StringUtils.deleteStart("domain.com", "www.")       = "domain.com"
-     * StringUtils.deleteStart("www.domain.com", "domain") = "www.domain.com"
-     * StringUtils.deleteStart("abc", "")    = "abc"
+     * StringAide.deleteStart(null, *)      = null
+     * StringAide.deleteStart("", *)        = ""
+     * StringAide.deleteStart(*, null)      = *
+     * StringAide.deleteStart("www.domain.com", "www.")   = "domain.com"
+     * StringAide.deleteStart("domain.com", "www.")       = "domain.com"
+     * StringAide.deleteStart("www.domain.com", "domain") = "www.domain.com"
+     * StringAide.deleteStart("abc", "")    = "abc"
      * </pre>
      *
      * @param string 源字符串
@@ -544,14 +544,14 @@ public class StringAide extends CharSequenceAide {
      * {@code deleteString} 为 null 或 空串 时直接返回 {@code string}。</p>
      *
      * <pre>
-     * StringUtils.deleteStartIgnoreCase(null, *)      = null
-     * StringUtils.deleteStartIgnoreCase("", *)        = ""
-     * StringUtils.deleteStartIgnoreCase(*, null)      = *
-     * StringUtils.deleteStartIgnoreCase("www.domain.com", "www.")   = "domain.com"
-     * StringUtils.deleteStartIgnoreCase("www.domain.com", "WWW.")   = "domain.com"
-     * StringUtils.deleteStartIgnoreCase("domain.com", "www.")       = "domain.com"
-     * StringUtils.deleteStartIgnoreCase("www.domain.com", "domain") = "www.domain.com"
-     * StringUtils.deleteStartIgnoreCase("abc", "")    = "abc"
+     * StringAide.deleteStartIgnoreCase(null, *)      = null
+     * StringAide.deleteStartIgnoreCase("", *)        = ""
+     * StringAide.deleteStartIgnoreCase(*, null)      = *
+     * StringAide.deleteStartIgnoreCase("www.domain.com", "www.")   = "domain.com"
+     * StringAide.deleteStartIgnoreCase("www.domain.com", "WWW.")   = "domain.com"
+     * StringAide.deleteStartIgnoreCase("domain.com", "www.")       = "domain.com"
+     * StringAide.deleteStartIgnoreCase("www.domain.com", "domain") = "www.domain.com"
+     * StringAide.deleteStartIgnoreCase("abc", "")    = "abc"
      * </pre>
      *
      * @param string 源字符串
@@ -576,13 +576,13 @@ public class StringAide extends CharSequenceAide {
      * {@code deleteString} 为 null 或 空串 时直接返回 {@code string}。</p>
      *
      * <pre>
-     * StringUtils.deleteEnd(null, *)      = null
-     * StringUtils.deleteEnd("", *)        = ""
-     * StringUtils.deleteEnd(*, null)      = *
-     * StringUtils.deleteEnd("www.domain.com", ".com.")  = "www.domain.com"
-     * StringUtils.deleteEnd("www.domain.com", ".com")   = "www.domain"
-     * StringUtils.deleteEnd("www.domain.com", "domain") = "www.domain.com"
-     * StringUtils.deleteEnd("abc", "")    = "abc"
+     * StringAide.deleteEnd(null, *)      = null
+     * StringAide.deleteEnd("", *)        = ""
+     * StringAide.deleteEnd(*, null)      = *
+     * StringAide.deleteEnd("www.domain.com", ".com.")  = "www.domain.com"
+     * StringAide.deleteEnd("www.domain.com", ".com")   = "www.domain"
+     * StringAide.deleteEnd("www.domain.com", "domain") = "www.domain.com"
+     * StringAide.deleteEnd("abc", "")    = "abc"
      * </pre>
      *
      * @param string 源字符串
@@ -607,15 +607,15 @@ public class StringAide extends CharSequenceAide {
      * {@code deleteString} 为 null 或 空串 时直接返回 {@code string}。</p>
      *
      * <pre>
-     * StringUtils.deleteEndIgnoreCase(null, *)      = null
-     * StringUtils.deleteEndIgnoreCase("", *)        = ""
-     * StringUtils.deleteEndIgnoreCase(*, null)      = *
-     * StringUtils.deleteEndIgnoreCase("www.domain.com", ".com.")  = "www.domain.com"
-     * StringUtils.deleteEndIgnoreCase("www.domain.com", ".com")   = "www.domain"
-     * StringUtils.deleteEndIgnoreCase("www.domain.com", "domain") = "www.domain.com"
-     * StringUtils.deleteEndIgnoreCase("abc", "")    = "abc"
-     * StringUtils.deleteEndIgnoreCase("www.domain.com", ".COM") = "www.domain")
-     * StringUtils.deleteEndIgnoreCase("www.domain.COM", ".com") = "www.domain")
+     * StringAide.deleteEndIgnoreCase(null, *)      = null
+     * StringAide.deleteEndIgnoreCase("", *)        = ""
+     * StringAide.deleteEndIgnoreCase(*, null)      = *
+     * StringAide.deleteEndIgnoreCase("www.domain.com", ".com.")  = "www.domain.com"
+     * StringAide.deleteEndIgnoreCase("www.domain.com", ".com")   = "www.domain"
+     * StringAide.deleteEndIgnoreCase("www.domain.com", "domain") = "www.domain.com"
+     * StringAide.deleteEndIgnoreCase("abc", "")    = "abc"
+     * StringAide.deleteEndIgnoreCase("www.domain.com", ".COM") = "www.domain")
+     * StringAide.deleteEndIgnoreCase("www.domain.COM", ".com") = "www.domain")
      * </pre>
      *
      * @param string 源字符串
@@ -1346,11 +1346,11 @@ public class StringAide extends CharSequenceAide {
      * <p>{@code str} 为 null 时返回 null，空串时返回一个空数组。</p>
      *
      * <pre>
-     * StringUtils.split(null)       = null
-     * StringUtils.split("")         = []
-     * StringUtils.split("abc def")  = ["abc", "def"]
-     * StringUtils.split("abc  def") = ["abc", "def"]
-     * StringUtils.split(" abc ")    = ["abc"]
+     * StringAide.split(null)       = null
+     * StringAide.split("")         = []
+     * StringAide.split("abc def")  = ["abc", "def"]
+     * StringAide.split("abc  def") = ["abc", "def"]
+     * StringAide.split(" abc ")    = ["abc"]
      * </pre>
      *
      * @param str 源字符串
@@ -1369,12 +1369,12 @@ public class StringAide extends CharSequenceAide {
      * <p>{@code str} 为 null 时返回 null，空串时返回一个空数组。</p>
      *
      * <pre>
-     * StringUtils.split(null, *)         = null
-     * StringUtils.split("", *)           = []
-     * StringUtils.split("a.b.c", '.')    = ["a", "b", "c"]
-     * StringUtils.split("a..b.c", '.')   = ["a", "b", "c"]
-     * StringUtils.split("a:b:c", '.')    = ["a:b:c"]
-     * StringUtils.split("a b c", ' ')    = ["a", "b", "c"]
+     * StringAide.split(null, *)         = null
+     * StringAide.split("", *)           = []
+     * StringAide.split("a.b.c", '.')    = ["a", "b", "c"]
+     * StringAide.split("a..b.c", '.')   = ["a", "b", "c"]
+     * StringAide.split("a:b:c", '.')    = ["a:b:c"]
+     * StringAide.split("a b c", ' ')    = ["a", "b", "c"]
      * </pre>
      *
      * @param str 源字符串
@@ -1395,12 +1395,12 @@ public class StringAide extends CharSequenceAide {
      * {@code separatorChars} 为 null 时使用 {@link Character#isWhitespace(char)} 定义的空白符 进行分隔。</p>
      *
      * <pre>
-     * StringUtils.split(null, *)         = null
-     * StringUtils.split("", *)           = []
-     * StringUtils.split("abc def", null) = ["abc", "def"]
-     * StringUtils.split("abc def", " ")  = ["abc", "def"]
-     * StringUtils.split("abc  def", " ") = ["abc", "def"]
-     * StringUtils.split("ab:cd:ef", ":") = ["ab", "cd", "ef"]
+     * StringAide.split(null, *)         = null
+     * StringAide.split("", *)           = []
+     * StringAide.split("abc def", null) = ["abc", "def"]
+     * StringAide.split("abc def", " ")  = ["abc", "def"]
+     * StringAide.split("abc  def", " ") = ["abc", "def"]
+     * StringAide.split("ab:cd:ef", ":") = ["ab", "cd", "ef"]
      * </pre>
      *
      * @param str 源字符串
@@ -1425,12 +1425,12 @@ public class StringAide extends CharSequenceAide {
      * 0 或 负值 表示不限制数量。</p>
      *
      * <pre>
-     * StringUtils.split(null, *, *)            = null
-     * StringUtils.split("", *, *)              = []
-     * StringUtils.split("ab cd ef", null, 0)   = ["ab", "cd", "ef"]
-     * StringUtils.split("ab   cd ef", null, 0) = ["ab", "cd", "ef"]
-     * StringUtils.split("ab:cd:ef", ":", 0)    = ["ab", "cd", "ef"]
-     * StringUtils.split("ab:cd:ef", ":", 2)    = ["ab", "cd:ef"]
+     * StringAide.split(null, *, *)            = null
+     * StringAide.split("", *, *)              = []
+     * StringAide.split("ab cd ef", null, 0)   = ["ab", "cd", "ef"]
+     * StringAide.split("ab   cd ef", null, 0) = ["ab", "cd", "ef"]
+     * StringAide.split("ab:cd:ef", ":", 0)    = ["ab", "cd", "ef"]
+     * StringAide.split("ab:cd:ef", ":", 2)    = ["ab", "cd:ef"]
      * </pre>
      *
      * @param str 源字符串
@@ -1453,12 +1453,12 @@ public class StringAide extends CharSequenceAide {
      * {@code separatorChars} 为 null 时使用 {@link Character#isWhitespace(char)} 定义的空白符 进行分隔。</p>
      *
      * <pre>
-     * StringUtils.splitByWholeSeparator(null, *)               = null
-     * StringUtils.splitByWholeSeparator("", *)                 = []
-     * StringUtils.splitByWholeSeparator("ab de fg", null)      = ["ab", "de", "fg"]
-     * StringUtils.splitByWholeSeparator("ab   de fg", null)    = ["ab", "de", "fg"]
-     * StringUtils.splitByWholeSeparator("ab:cd:ef", ":")       = ["ab", "cd", "ef"]
-     * StringUtils.splitByWholeSeparator("ab-!-cd-!-ef", "-!-") = ["ab", "cd", "ef"]
+     * StringAide.splitByWholeSeparator(null, *)               = null
+     * StringAide.splitByWholeSeparator("", *)                 = []
+     * StringAide.splitByWholeSeparator("ab de fg", null)      = ["ab", "de", "fg"]
+     * StringAide.splitByWholeSeparator("ab   de fg", null)    = ["ab", "de", "fg"]
+     * StringAide.splitByWholeSeparator("ab:cd:ef", ":")       = ["ab", "cd", "ef"]
+     * StringAide.splitByWholeSeparator("ab-!-cd-!-ef", "-!-") = ["ab", "cd", "ef"]
      * </pre>
      *
      * @param str 源字符串
@@ -1484,13 +1484,13 @@ public class StringAide extends CharSequenceAide {
      * 0 或 负值 表示不限制数量。</p>
      *
      * <pre>
-     * StringUtils.splitByWholeSeparator(null, *, *)               = null
-     * StringUtils.splitByWholeSeparator("", *, *)                 = []
-     * StringUtils.splitByWholeSeparator("ab de fg", null, 0)      = ["ab", "de", "fg"]
-     * StringUtils.splitByWholeSeparator("ab   de fg", null, 0)    = ["ab", "de", "fg"]
-     * StringUtils.splitByWholeSeparator("ab:cd:ef", ":", 2)       = ["ab", "cd:ef"]
-     * StringUtils.splitByWholeSeparator("ab-!-cd-!-ef", "-!-", 5) = ["ab", "cd", "ef"]
-     * StringUtils.splitByWholeSeparator("ab-!-cd-!-ef", "-!-", 2) = ["ab", "cd-!-ef"]
+     * StringAide.splitByWholeSeparator(null, *, *)               = null
+     * StringAide.splitByWholeSeparator("", *, *)                 = []
+     * StringAide.splitByWholeSeparator("ab de fg", null, 0)      = ["ab", "de", "fg"]
+     * StringAide.splitByWholeSeparator("ab   de fg", null, 0)    = ["ab", "de", "fg"]
+     * StringAide.splitByWholeSeparator("ab:cd:ef", ":", 2)       = ["ab", "cd:ef"]
+     * StringAide.splitByWholeSeparator("ab-!-cd-!-ef", "-!-", 5) = ["ab", "cd", "ef"]
+     * StringAide.splitByWholeSeparator("ab-!-cd-!-ef", "-!-", 2) = ["ab", "cd-!-ef"]
      * </pre>
      *
      * @param str 源字符串
@@ -1513,12 +1513,12 @@ public class StringAide extends CharSequenceAide {
      * {@code separatorChars} 为 null 时使用 {@link Character#isWhitespace(char)} 定义的空白符 进行分隔。</p>
      *
      * <pre>
-     * StringUtils.splitByWholeSeparatorPreserveAllTokens(null, *)               = null
-     * StringUtils.splitByWholeSeparatorPreserveAllTokens("", *)                 = []
-     * StringUtils.splitByWholeSeparatorPreserveAllTokens("ab de fg", null)      = ["ab", "de", "fg"]
-     * StringUtils.splitByWholeSeparatorPreserveAllTokens("ab   de fg", null)    = ["ab", "", "", "de", "fg"]
-     * StringUtils.splitByWholeSeparatorPreserveAllTokens("ab:cd:ef", ":")       = ["ab", "cd", "ef"]
-     * StringUtils.splitByWholeSeparatorPreserveAllTokens("ab-!-cd-!-ef", "-!-") = ["ab", "cd", "ef"]
+     * StringAide.splitByWholeSeparatorPreserveAllTokens(null, *)               = null
+     * StringAide.splitByWholeSeparatorPreserveAllTokens("", *)                 = []
+     * StringAide.splitByWholeSeparatorPreserveAllTokens("ab de fg", null)      = ["ab", "de", "fg"]
+     * StringAide.splitByWholeSeparatorPreserveAllTokens("ab   de fg", null)    = ["ab", "", "", "de", "fg"]
+     * StringAide.splitByWholeSeparatorPreserveAllTokens("ab:cd:ef", ":")       = ["ab", "cd", "ef"]
+     * StringAide.splitByWholeSeparatorPreserveAllTokens("ab-!-cd-!-ef", "-!-") = ["ab", "cd", "ef"]
      * </pre>
      *
      * @param str 源字符串
@@ -1545,13 +1545,13 @@ public class StringAide extends CharSequenceAide {
      * 0 或 负值 表示不限制数量。</p>
      *
      * <pre>
-     * StringUtils.splitByWholeSeparatorPreserveAllTokens(null, *, *)               = null
-     * StringUtils.splitByWholeSeparatorPreserveAllTokens("", *, *)                 = []
-     * StringUtils.splitByWholeSeparatorPreserveAllTokens("ab de fg", null, 0)      = ["ab", "de", "fg"]
-     * StringUtils.splitByWholeSeparatorPreserveAllTokens("ab   de fg", null, 0)    = ["ab", "", "", "de", "fg"]
-     * StringUtils.splitByWholeSeparatorPreserveAllTokens("ab:cd:ef", ":", 2)       = ["ab", "cd:ef"]
-     * StringUtils.splitByWholeSeparatorPreserveAllTokens("ab-!-cd-!-ef", "-!-", 5) = ["ab", "cd", "ef"]
-     * StringUtils.splitByWholeSeparatorPreserveAllTokens("ab-!-cd-!-ef", "-!-", 2) = ["ab", "cd-!-ef"]
+     * StringAide.splitByWholeSeparatorPreserveAllTokens(null, *, *)               = null
+     * StringAide.splitByWholeSeparatorPreserveAllTokens("", *, *)                 = []
+     * StringAide.splitByWholeSeparatorPreserveAllTokens("ab de fg", null, 0)      = ["ab", "de", "fg"]
+     * StringAide.splitByWholeSeparatorPreserveAllTokens("ab   de fg", null, 0)    = ["ab", "", "", "de", "fg"]
+     * StringAide.splitByWholeSeparatorPreserveAllTokens("ab:cd:ef", ":", 2)       = ["ab", "cd:ef"]
+     * StringAide.splitByWholeSeparatorPreserveAllTokens("ab-!-cd-!-ef", "-!-", 5) = ["ab", "cd", "ef"]
+     * StringAide.splitByWholeSeparatorPreserveAllTokens("ab-!-cd-!-ef", "-!-", 2) = ["ab", "cd-!-ef"]
      * </pre>
      *
      * @param str 源字符串
