@@ -42,7 +42,7 @@ public class StringAide extends CharSequenceAide {
 
 
 
-    // ----- Trim string ----- begin
+    // ----- Trim string ----- start
     // ---------------------------------------------------------------------------------------------------
     /**
      * <p>从字符串的首尾两端移除控制字符（char <= 32），即 {@link String#trim()}。当字符串为 null 时返回 {@code null}。</p>
@@ -82,7 +82,7 @@ public class StringAide extends CharSequenceAide {
     // ---------------------------------------------------------------------------------------------------
     // ----- Trim string ----- end
 
-    // ----- Strip string ----- begin
+    // ----- Strip string ----- start
     // ---------------------------------------------------------------------------------------------------
     /**
      * <p>从字符串的开头剥离指定的一组字符。</p>
@@ -95,17 +95,17 @@ public class StringAide extends CharSequenceAide {
      * </ul>
      *
      * <pre>
-     * StringAide.stripLeft(null, *)          = null
-     * StringAide.stripLeft("", *)            = ""
-     * StringAide.stripLeft("abc", "")        = "abc"
-     * StringAide.stripLeft("  abc", "")      = "  abc"
-     * StringAide.stripLeft("abc", null)      = "abc"
-     * StringAide.stripLeft("  abc", null)    = "abc"
-     * StringAide.stripLeft("abc  ", null)    = "abc  "
-     * StringAide.stripLeft(" abc ", null)    = "abc "
-     * StringAide.stripLeft("yxabc  ", "xyz") = "abc  "
-     * StringAide.stripLeft("yxabyc", "xyz")  = "abyc"
-     * StringAide.stripLeft("  yxabc", "xyz") = "  yxabc"
+     * StringAide.stripStart(null, *)          = null
+     * StringAide.stripStart("", *)            = ""
+     * StringAide.stripStart("abc", "")        = "abc"
+     * StringAide.stripStart("  abc", "")      = "  abc"
+     * StringAide.stripStart("abc", null)      = "abc"
+     * StringAide.stripStart("  abc", null)    = "abc"
+     * StringAide.stripStart("abc  ", null)    = "abc  "
+     * StringAide.stripStart(" abc ", null)    = "abc "
+     * StringAide.stripStart("yxabc  ", "xyz") = "abc  "
+     * StringAide.stripStart("yxabyc", "xyz")  = "abyc"
+     * StringAide.stripStart("  yxabc", "xyz") = "  yxabc"
      * </pre>
      *
      * @param string 源字符串，可以为 null
@@ -113,24 +113,24 @@ public class StringAide extends CharSequenceAide {
      * @return 剥离指定字符后的字符串
      * @since 1.0.0
      */
-    public static String stripLeft(final String string, final String stripChars) {
+    public static String stripStart(final String string, final String stripChars) {
         int stringLength;
         if (string == null || (stringLength = string.length()) == 0) {
             return string;
         }
-        int begin = 0;
+        int start = 0;
         if (stripChars == null) {
-            while (begin != stringLength && Character.isWhitespace(string.charAt(begin))) {
-                begin++;
+            while (start != stringLength && Character.isWhitespace(string.charAt(start))) {
+                start++;
             }
         } else if (stripChars.isEmpty()) {
             return string;
         } else {
-            while (begin != stringLength && stripChars.indexOf(string.charAt(begin)) != INDEX_NOT_FOUND) {
-                begin++;
+            while (start != stringLength && stripChars.indexOf(string.charAt(start)) != INDEX_NOT_FOUND) {
+                start++;
             }
         }
-        return string.substring(begin);
+        return string.substring(start);
     }
 
     /**
@@ -144,18 +144,18 @@ public class StringAide extends CharSequenceAide {
      * </ul>
      *
      * <pre>
-     * StringAide.stripRight(null, *)          = null
-     * StringAide.stripRight("", *)            = ""
-     * StringAide.stripRight("abc", "")        = "abc"
-     * StringAide.stripRight("abc  ", "")      = "abc  "
-     * StringAide.stripRight("abc", null)      = "abc"
-     * StringAide.stripRight("  abc", null)    = "  abc"
-     * StringAide.stripRight("abc  ", null)    = "abc"
-     * StringAide.stripRight(" abc ", null)    = " abc"
-     * StringAide.stripRight("  abcyx", "xyz") = "  abc"
-     * StringAide.stripRight("120.00", ".0")   = "12"
-     * StringAide.stripRight("axbcyx", "xyz")  = "axbc"
-     * StringAide.stripRight("abcyx  ", "xyz") = "abcyx  "
+     * StringAide.stripEnd(null, *)          = null
+     * StringAide.stripEnd("", *)            = ""
+     * StringAide.stripEnd("abc", "")        = "abc"
+     * StringAide.stripEnd("abc  ", "")      = "abc  "
+     * StringAide.stripEnd("abc", null)      = "abc"
+     * StringAide.stripEnd("  abc", null)    = "  abc"
+     * StringAide.stripEnd("abc  ", null)    = "abc"
+     * StringAide.stripEnd(" abc ", null)    = " abc"
+     * StringAide.stripEnd("  abcyx", "xyz") = "  abc"
+     * StringAide.stripEnd("120.00", ".0")   = "12"
+     * StringAide.stripEnd("axbcyx", "xyz")  = "axbc"
+     * StringAide.stripEnd("abcyx  ", "xyz") = "abcyx  "
      * </pre>
      *
      * @param string 源字符串，可以为 null
@@ -163,7 +163,7 @@ public class StringAide extends CharSequenceAide {
      * @return 剥离指定字符后的字符串
      * @since 1.0.0
      */
-    public static String stripRight(final String string, final String stripChars) {
+    public static String stripEnd(final String string, final String stripChars) {
         int end;
         if (string == null || (end = string.length()) == 0) {
             return string;
@@ -214,7 +214,7 @@ public class StringAide extends CharSequenceAide {
         if (isEmpty(string)) {
             return string;
         }
-        return stripRight(stripLeft(string, stripChars), stripChars);
+        return stripEnd(stripStart(string, stripChars), stripChars);
     }
 
     /**
@@ -310,20 +310,79 @@ public class StringAide extends CharSequenceAide {
     // ---------------------------------------------------------------------------------------------------
     // ----- Strip string ----- end
 
-    // ----- Delete/Remove ----- begin
+    // ----- Delete ----- start
     // ---------------------------------------------------------------------------------------------------
-    // TODO delete comment
-    public static String delete(final String string, final char deleteChar) {
-        return delete(string, String.valueOf(deleteChar));
+    // TODO delete string
+    public static String delete(final String string, final String... substrings) {
+        return null; // TODO delete
     }
 
-    // TODO deleteIgnoreCase comment
-    public static String deleteIgnoreCase(final String string, final char deleteChar) {
-        return deleteIgnoreCase(string, String.valueOf(deleteChar));
+    public static String deleteIgnoreCase(final String string, final String... substrings) {
+        return null; // TODO deleteIgnoreCase
+    }
+
+    private static String delete(final String string, final String deleteString, final boolean ignoreCase) {
+        return null; // TODO delete with ignoreCase
     }
 
     /**
-     * <p>从字符串中删除指定的一组字符。</p>
+     * <p>从 {@code string} 中将指定类型的字符删除。</p>
+     *
+     * <pre>
+     * StringAide.deleteByCharacterType("aBc+123", Character.UPPERCASE_LETTER)    = "ac+123"
+     * StringAide.deleteByCharacterType("aBc+123", Character.LOWERCASE_LETTER)    = "B+123"
+     * StringAide.deleteByCharacterType("aBc+123", Character.DECIMAL_DIGIT_NUMBER)    = "aBc+"
+     * StringAide.deleteByCharacterType("aBc+123", Character.MATH_SYMBOL)    = "aBc123"
+     * StringAide.deleteByCharacterType("aBc+123", Character.UPPERCASE_LETTER, Character.LOWERCASE_LETTER)    = "+123"
+     * </pre>
+     *
+     * @param string 源字符串
+     * @param characterTypes 字符类型
+     * @return 删除指定类型字符后的字符串
+     * @since 1.0.0
+     */
+    public static String deleteByCharacterType(final String string, final int... characterTypes) {
+        int length;
+        if (string == null || (length = string.length()) == 0 || ArrayAide.isEmpty(characterTypes)) {
+            return string;
+        }
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < length; i++) {
+            char ch = string.charAt(i);
+            if (!ArrayAide.contains(characterTypes, Character.getType(ch))) {
+                builder.append(ch);
+            }
+        }
+        return builder.toString();
+    }
+
+    /**
+     * <p>从字符串中删除指定字符。</p>
+     *
+     * @param string 源字符串，可以为 null
+     * @param deleteChar 要删除的字符
+     * @return 删除指定字符后的字符串
+     * @since 1.0.0
+     */
+    public static String deleteChar(final String string, final char deleteChar) {
+        return deleteChars(string, String.valueOf(deleteChar));
+    }
+
+    /**
+     * <p>从字符串中删除指定字符，忽略大小写（无论大写小写都删除。</p>
+     *
+     * @param string 源字符串，可以为 null
+     * @param deleteChar 要删除的字符
+     * @return 删除指定字符后的字符串
+     * @since 1.0.0
+     */
+    public static String deleteCharIgnoreCase(final String string, final char deleteChar) {
+        return deleteCharsIgnoreCase(string, String.valueOf(deleteChar));
+    }
+
+    /**
+     * <p>从字符串中删除指定的一组字符。
+     * 针对 {@code deleteChars} 中的每一个字符单独进行删除操作。</p>
      *
      * <p>注意：</p>
      * <ul>
@@ -346,12 +405,13 @@ public class StringAide extends CharSequenceAide {
      * @return 删除指定字符后的字符串
      * @since 1.0.0
      */
-    public static String delete(final String string, final String deleteChars) {
-        return delete(string, deleteChars, false);
+    public static String deleteChars(final String string, final String deleteChars) {
+        return deleteChars(string, deleteChars, false);
     }
 
     /**
-     * <p>从字符串中删除指定的一组字符，忽略大小写（无论大写小写都删除）。</p>
+     * <p>从字符串中删除指定的一组字符，忽略大小写（无论大写小写都删除）。
+     * 针对 {@code deleteChars} 中的每一个字符单独进行删除操作。</p>
      *
      * <p>注意：</p>
      * <ul>
@@ -374,8 +434,8 @@ public class StringAide extends CharSequenceAide {
      * @return 删除指定字符后的字符串
      * @since 1.0.0
      */
-    public static String deleteIgnoreCase(final String string, final String deleteChars) {
-        return delete(string, deleteChars, true);
+    public static String deleteCharsIgnoreCase(final String string, final String deleteChars) {
+        return deleteChars(string, deleteChars, true);
     }
 
     /**
@@ -411,7 +471,7 @@ public class StringAide extends CharSequenceAide {
      * @return 删除指定字符后的字符串
      * @since 1.0.0
      */
-    private static String delete(final String string, final String deleteChars, boolean ignoreCase) {
+    private static String deleteChars(final String string, final String deleteChars, boolean ignoreCase) {
         int length;
         if (string == null || (length = string.length()) == 0) {
             return string;
@@ -446,44 +506,136 @@ public class StringAide extends CharSequenceAide {
         }
     }
 
-    // TODO comment
-    public static String deleteLeft(final String string, final String delete) {
-        return null; // TODO deleteLeft
+    /**
+     * <p>当 {@code string} 以 {@code deleteString} 开头时，将开头的 {@code deleteString} 删除。</p>
+     *
+     * <p>{@code string} 为 null 时返回 {@code null}，空串 时返回 空串。
+     * {@code deleteString} 为 null 或 空串 时直接返回 {@code string}。</p>
+     *
+     * <pre>
+     * StringUtils.deleteStart(null, *)      = null
+     * StringUtils.deleteStart("", *)        = ""
+     * StringUtils.deleteStart(*, null)      = *
+     * StringUtils.deleteStart("www.domain.com", "www.")   = "domain.com"
+     * StringUtils.deleteStart("domain.com", "www.")       = "domain.com"
+     * StringUtils.deleteStart("www.domain.com", "domain") = "www.domain.com"
+     * StringUtils.deleteStart("abc", "")    = "abc"
+     * </pre>
+     *
+     * @param string 源字符串
+     * @param deleteString 要删除的字符串
+     * @return 去掉开头 {@code deleteString} 之后的字符串
+     * @since 1.0.0
+     */
+    public static String deleteStart(final String string, final String deleteString) {
+        if (isEmpty(string) || isEmpty(deleteString)) {
+            return string;
+        }
+        if (string.startsWith(deleteString)) {
+            return string.substring(deleteString.length());
+        }
+        return string;
     }
 
-    // TODO comment
-    public static String deleteLeftIgnoreCase(final String string, final String delete) {
-        return null; // TODO deleteLeftIgnoreCase
+    /**
+     * <p>当 {@code string} 以 {@code deleteString} 开头时，将开头的 {@code deleteString} 删除，不区分大小写。</p>
+     *
+     * <p>{@code string} 为 null 时返回 {@code null}，空串 时返回 空串。
+     * {@code deleteString} 为 null 或 空串 时直接返回 {@code string}。</p>
+     *
+     * <pre>
+     * StringUtils.deleteStartIgnoreCase(null, *)      = null
+     * StringUtils.deleteStartIgnoreCase("", *)        = ""
+     * StringUtils.deleteStartIgnoreCase(*, null)      = *
+     * StringUtils.deleteStartIgnoreCase("www.domain.com", "www.")   = "domain.com"
+     * StringUtils.deleteStartIgnoreCase("www.domain.com", "WWW.")   = "domain.com"
+     * StringUtils.deleteStartIgnoreCase("domain.com", "www.")       = "domain.com"
+     * StringUtils.deleteStartIgnoreCase("www.domain.com", "domain") = "www.domain.com"
+     * StringUtils.deleteStartIgnoreCase("abc", "")    = "abc"
+     * </pre>
+     *
+     * @param string 源字符串
+     * @param deleteString 要删除的字符串
+     * @return 去掉开头 {@code deleteString} 之后的字符串
+     * @since 1.0.0
+     */
+    public static String deleteStartIgnoreCase(final String string, final String deleteString) {
+        if (isEmpty(string) || isEmpty(deleteString)) {
+            return string;
+        }
+        if (startsWithIgnoreCase(string, deleteString)) {
+            return string.substring(deleteString.length());
+        }
+        return string;
     }
 
-    // TODO comment
-    public static String deleteRight(final String string, final String delete) {
-        return null; // TODO deleteRight
+    /**
+     * <p>当 {@code string} 以 {@code deleteString} 结尾时，将结尾的 {@code deleteString} 删除。</p>
+     *
+     * <p>{@code string} 为 null 时返回 {@code null}，空串 时返回 空串。
+     * {@code deleteString} 为 null 或 空串 时直接返回 {@code string}。</p>
+     *
+     * <pre>
+     * StringUtils.deleteEnd(null, *)      = null
+     * StringUtils.deleteEnd("", *)        = ""
+     * StringUtils.deleteEnd(*, null)      = *
+     * StringUtils.deleteEnd("www.domain.com", ".com.")  = "www.domain.com"
+     * StringUtils.deleteEnd("www.domain.com", ".com")   = "www.domain"
+     * StringUtils.deleteEnd("www.domain.com", "domain") = "www.domain.com"
+     * StringUtils.deleteEnd("abc", "")    = "abc"
+     * </pre>
+     *
+     * @param string 源字符串
+     * @param deleteString 要删除的字符串
+     * @return 去掉结尾 {@code deleteString} 之后的字符串
+     * @since 1.0.0
+     */
+    public static String deleteEnd(final String string, final String deleteString) {
+        if (isEmpty(string) || isEmpty(deleteString)) {
+            return string;
+        }
+        if (string.endsWith(deleteString)) {
+            return string.substring(0, string.length() - deleteString.length());
+        }
+        return string;
     }
 
-    // TODO comment
-    public static String deleteRightIgnoreCase(final String string, final String delete) {
-        return null; // TODO deleteRightIgnoreCase
-    }
-
-    // TODO comment
-    public static String deleteWhole(final String string, final String... wholes) {
-        return null; // TODO deleteWhole
-    }
-
-    // TODO comment
-    public static String deleteWholeIgnoreCase(final String string, final String... wholes) {
-        return null; // TODO deleteWholeIgnoreCase
-    }
-
-    // TODO comment
-    public static String deleteWhole(final boolean ignoreCase, final String string, final String... wholes) {
-        return null; // TODO deleteWhole
+    /**
+     * <p>当 {@code string} 以 {@code deleteString} 结尾时，将结尾的 {@code deleteString} 删除，不区分大小写。</p>
+     *
+     * <p>{@code string} 为 null 时返回 {@code null}，空串 时返回 空串。
+     * {@code deleteString} 为 null 或 空串 时直接返回 {@code string}。</p>
+     *
+     * <pre>
+     * StringUtils.deleteEndIgnoreCase(null, *)      = null
+     * StringUtils.deleteEndIgnoreCase("", *)        = ""
+     * StringUtils.deleteEndIgnoreCase(*, null)      = *
+     * StringUtils.deleteEndIgnoreCase("www.domain.com", ".com.")  = "www.domain.com"
+     * StringUtils.deleteEndIgnoreCase("www.domain.com", ".com")   = "www.domain"
+     * StringUtils.deleteEndIgnoreCase("www.domain.com", "domain") = "www.domain.com"
+     * StringUtils.deleteEndIgnoreCase("abc", "")    = "abc"
+     * StringUtils.deleteEndIgnoreCase("www.domain.com", ".COM") = "www.domain")
+     * StringUtils.deleteEndIgnoreCase("www.domain.COM", ".com") = "www.domain")
+     * </pre>
+     *
+     * @param string 源字符串
+     * @param deleteString 要删除的字符串
+     * @return 去掉结尾 {@code deleteString} 之后的字符串
+     * @since 1.0.0
+     */
+    public static String deleteEndIgnoreCase(final String string, final String deleteString) {
+        if (isEmpty(string) || isEmpty(deleteString)) {
+            return string;
+        }
+        if (endsWithIgnoreCase(string, deleteString)) {
+            return string.substring(0, string.length() - deleteString.length());
+        }
+        return string;
     }
     // ---------------------------------------------------------------------------------------------------
-    // ----- Delete/Remove ----- end
+    // ----- Delete ----- end
 
-    // ----- Truncate string ----- begin
+    // ----- Truncate string ----- start
     // ---------------------------------------------------------------------------------------------------
     /**
      * <p>从指定位置开始截取指定长度的字符串。</p>
@@ -581,7 +733,7 @@ public class StringAide extends CharSequenceAide {
     // ---------------------------------------------------------------------------------------------------
     // ----- Truncate string ----- end
 
-    // ----- Compare string ----- begin
+    // ----- Compare string ----- start
     // ---------------------------------------------------------------------------------------------------
     /**
      * <p>按字典顺序比较两个字符串。</p>
@@ -705,7 +857,7 @@ public class StringAide extends CharSequenceAide {
     // ---------------------------------------------------------------------------------------------------
     // ----- Compare string ----- end
 
-    // ----- Substring ----- begin
+    // ----- Substring ----- start
     // ---------------------------------------------------------------------------------------------------
     /**
      * <p>从指定位置开始截取子串。</p>
@@ -725,33 +877,33 @@ public class StringAide extends CharSequenceAide {
      * </pre>
      *
      * @param string 源字符串
-     * @param begin 起始位置，负数意味着从字符串末尾倒数这么多个字符
+     * @param start 起始位置，负数意味着从字符串末尾倒数这么多个字符
      * @return 起始范围内的子串，若源字符串为 null 则返回 {@code null}
      * @since 1.0.0
      */
-    public static String substring(final String string, int begin) {
+    public static String substring(final String string, int start) {
         if (string == null) {
             return null;
         }
 
-        if (begin < 0) {
-            begin = string.length() + begin;
+        if (start < 0) {
+            start = string.length() + start;
         }
-        if (begin < 0) {
-            begin = 0;
+        if (start < 0) {
+            start = 0;
         }
 
-        if (begin > string.length()) {
+        if (start > string.length()) {
             return EMPTY;
         }
 
-        return string.substring(begin);
+        return string.substring(start);
     }
 
     /**
      * <p>从指定字符串中获取子串。</p>
      *
-     * <p>返回的子串以 {@code begin} 位置的字符开头，在 {@code end} 之前结束。
+     * <p>返回的子串以 {@code start} 位置的字符开头，在 {@code end} 之前结束。
      * 负的起始位置可用于指定相对于字符串结尾的偏移量（详见参数列表）。</p>
      *
      * <pre>
@@ -767,12 +919,12 @@ public class StringAide extends CharSequenceAide {
      * </pre>
      *
      * @param string 源字符串
-     * @param begin 起始位置，负数意味着从字符串末尾倒数这么多个字符
+     * @param start 起始位置，负数意味着从字符串末尾倒数这么多个字符
      * @param end 结束位置，负数意味着从字符串末尾倒数这么多个字符
      * @return 起始范围内的子串，若源字符串为 null 则返回 {@code null}
      * @since 1.0.0
      */
-    public static String substring(final String string, int begin, int end) {
+    public static String substring(final String string, int start, int end) {
         if (string == null) {
             return null;
         }
@@ -780,26 +932,26 @@ public class StringAide extends CharSequenceAide {
         if (end < 0) {
             end = string.length() + end;
         }
-        if (begin < 0) {
-            begin = string.length() + begin;
+        if (start < 0) {
+            start = string.length() + start;
         }
 
         if (end > string.length()) {
             end = string.length();
         }
 
-        if (begin > end) {
+        if (start > end) {
             return EMPTY;
         }
 
-        if (begin < 0) {
-            begin = 0;
+        if (start < 0) {
+            start = 0;
         }
         if (end < 0) {
             end = 0;
         }
 
-        return string.substring(begin, end);
+        return string.substring(start, end);
     }
 
     /**
@@ -1098,11 +1250,11 @@ public class StringAide extends CharSequenceAide {
         if (string == null || open == null || close == null) {
             return null;
         }
-        final int begin = string.indexOf(open);
-        if (begin != INDEX_NOT_FOUND) {
-            final int end = string.indexOf(close, begin + open.length());
+        final int start = string.indexOf(open);
+        if (start != INDEX_NOT_FOUND) {
+            final int end = string.indexOf(close, start + open.length());
             if (end != INDEX_NOT_FOUND) {
-                return string.substring(begin + open.length(), end);
+                return string.substring(start + open.length(), end);
             }
         }
         return null;
@@ -1164,16 +1316,16 @@ public class StringAide extends CharSequenceAide {
         final List<String> list = new ArrayList<>();
         int index = 0;
         while (index < strLength - closeLength) {
-            int begin = string.indexOf(open, index);
-            if (begin < 0) {
+            int start = string.indexOf(open, index);
+            if (start < 0) {
                 break;
             }
-            begin += openLength;
-            final int end = string.indexOf(close, begin);
+            start += openLength;
+            final int end = string.indexOf(close, start);
             if (end < 0) {
                 break;
             }
-            list.add(string.substring(begin, end));
+            list.add(string.substring(start, end));
             index = end + closeLength;
         }
         if (list.isEmpty()) {
@@ -1184,7 +1336,7 @@ public class StringAide extends CharSequenceAide {
     // ---------------------------------------------------------------------------------------------------
     // ----- Substring ----- end
 
-    // ----- Split ----- begin
+    // ----- Split ----- start
     // ---------------------------------------------------------------------------------------------------
     /**
      * <p>将 {@code str} 使用 {@link Character#isWhitespace(char)} 定义的空白符作为分隔符拆分成一个字符串数组。</p>
@@ -1441,20 +1593,20 @@ public class StringAide extends CharSequenceAide {
 
         final List<String> list = new ArrayList<>();
         int numberOfSubstrings = 0;
-        int begin = 0;
+        int start = 0;
         int end = 0;
         while (end < strLen) {
-            end = str.indexOf(separator, begin);
+            end = str.indexOf(separator, start);
             if (end >= 0) {
-                if (end > begin) {
+                if (end > start) {
                     numberOfSubstrings++;
 
                     if (numberOfSubstrings == max) {
                         end = strLen;
-                        list.add(str.substring(begin));
+                        list.add(str.substring(start));
                     } else {
-                        list.add(str.substring(begin, end));
-                        begin = end + separatorLen;
+                        list.add(str.substring(start, end));
+                        start = end + separatorLen;
                     }
                 } else {
                     if (preserveAllTokens) {
@@ -1462,15 +1614,15 @@ public class StringAide extends CharSequenceAide {
 
                         if (numberOfSubstrings == max) {
                             end = strLen;
-                            list.add(str.substring(begin));
+                            list.add(str.substring(start));
                         } else {
                             list.add(EMPTY);
                         }
                     }
-                    begin = end + separatorLen;
+                    start = end + separatorLen;
                 }
             } else {
-                list.add(str.substring(begin));
+                list.add(str.substring(start));
                 end = strLen;
             }
         }
@@ -1662,7 +1814,7 @@ public class StringAide extends CharSequenceAide {
         }
         final List<String> list = new ArrayList<>();
         int sizePlus1 = 1;
-        int i = 0, begin = 0;
+        int i = 0, start = 0;
         boolean match = false;
         boolean lastMath = false;
 
@@ -1685,10 +1837,10 @@ public class StringAide extends CharSequenceAide {
                         i = strLen;
                         lastMath = false;
                     }
-                    list.add(str.substring(begin, i));
+                    list.add(str.substring(start, i));
                     match = false;
                 }
-                begin = ++i;
+                start = ++i;
                 continue;
             }
             lastMath = false;
@@ -1697,7 +1849,7 @@ public class StringAide extends CharSequenceAide {
         }
 
         if (match || preserveAllTokens && lastMath) {
-            list.add(str.substring(begin, i));
+            list.add(str.substring(start, i));
         }
         return list.toArray(new String[0]);
     }
@@ -1810,7 +1962,7 @@ public class StringAide extends CharSequenceAide {
     // ---------------------------------------------------------------------------------------------------
     // ----- Split ----- end
 
-    // ----- Joining ----- begin
+    // ----- Joining ----- start
     // ---------------------------------------------------------------------------------------------------
     // ---------------------------------------------------------------------------------------------------
     // ----- Joining ----- end

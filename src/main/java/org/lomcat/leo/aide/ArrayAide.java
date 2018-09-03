@@ -30,18 +30,7 @@ import java.lang.reflect.Array;
 public class ArrayAide {
 
     public static final String[] EMPTY_STRING_ARRAY = new String[0];
-
-    public static boolean isEmpty(final Object[] array) {
-        return length(array) == 0;
-    }
-
-    public static boolean isEmpty(final char[] array) {
-        return length(array) == 0;
-    }
-
-    public static boolean isNotEmpty(final Object[] array) {
-        return !isEmpty(array);
-    }
+    public static final int INDEX_NOT_FOUND = -1;
 
     public static int length(final Object[] array) {
         if (array == null) {
@@ -59,5 +48,75 @@ public class ArrayAide {
 
     public static String[] newStringArray() {
         return new String[0];
+    }
+
+    public static boolean isEmpty(final Object[] array) {
+        return length(array) == 0;
+    }
+
+    public static boolean isEmpty(final int[] array) {
+        return length(array) == 0;
+    }
+
+    public static boolean isEmpty(final char[] array) {
+        return length(array) == 0;
+    }
+
+    public static boolean isNotEmpty(final Object[] array) {
+        return !isEmpty(array);
+    }
+
+    public static int indexOf(final Object[] array, final Object object) {
+        return indexOf(array, object, 0);
+    }
+
+    public static int indexOf(final Object[] array, final Object object, int startIndex) {
+        if (array == null) {
+            return INDEX_NOT_FOUND;
+        }
+        if (startIndex < 0) {
+            startIndex = 0;
+        }
+        if (object == null) {
+            for (int i = startIndex; i < array.length; i++) {
+                if (array[i] == null) {
+                    return i;
+                }
+            }
+        } else {
+            for (int i = startIndex; i < array.length; i++) {
+                if (object.equals(array[i])) {
+                    return i;
+                }
+            }
+        }
+        return INDEX_NOT_FOUND;
+    }
+
+    public static int indexOf(final int[] array, final int value) {
+        return indexOf(array, value, 0);
+    }
+
+    public static int indexOf(final int[] array, final int value, int startIndex) {
+        if (array == null) {
+            return INDEX_NOT_FOUND;
+        }
+        if (startIndex < 0) {
+            startIndex = 0;
+        }
+        for (int i = startIndex; i < array.length; i++) {
+            if (value == array[i]) {
+                return i;
+            }
+        }
+        return INDEX_NOT_FOUND;
+    }
+
+    public static boolean contains(final Object[] array, final Object object) {
+        return indexOf(array, object) != INDEX_NOT_FOUND;
+    }
+
+    public static boolean contains(final int[] array, final int value) {
+        return indexOf(array, value) != INDEX_NOT_FOUND;
     }
 }

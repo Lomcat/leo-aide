@@ -41,9 +41,9 @@ public class CharSequenceAide {
     }
 
     /**
-     * <p>将字符序列装换为 char 数组。</p>
+     * <p>将字符序列转换为 char 数组。</p>
      *
-     * @param sequence 要处理的字符序列，当为 null 时返回 null
+     * @param sequence 要处理的字符序列，当为 {@code null} 时返回 {@code null}，空串 返回一个 空数组
      * @return char 数组
      * @since 1.0.0
      */
@@ -62,36 +62,36 @@ public class CharSequenceAide {
         return chars;
     }
 
-    // ----- Sub sequence ----- begin
+    // ----- Sub sequence ----- start
     // ---------------------------------------------------------------------------------------------------
     /**
-     * <p>从字符序列中截取指定范围的子序列</p>
+     * <p>从字符序列中截取指定范围的子序列。</p>
      *
-     * @param sequence 源字符序列，可以为 null
-     * @param begin 起始位置
+     * @param sequence 源字符序列，可以为 {@code null}
+     * @param start 起始位置
      * @param end 结束位置
      * @return 子序列
      * @since 1.0.0
      */
-    public static CharSequence subSequence(final CharSequence sequence, int begin, int end) {
-        return sequence == null ? null : sequence.subSequence(begin, end);
+    public static CharSequence subSequence(final CharSequence sequence, int start, int end) {
+        return sequence == null ? null : sequence.subSequence(start, end);
     }
 
     /**
-     * <p>从字符序列中截取指定位置后的子序列</p>
+     * <p>从字符序列中截取指定位置后的子序列。</p>
      *
-     * @param sequence 源字符序列，可以为 null
-     * @param begin 起始位置
+     * @param sequence 源字符序列，可以为 {@code null}
+     * @param start 起始位置
      * @return 子序列
      * @since 1.0.0
      */
-    public static CharSequence subSequence(final CharSequence sequence, final int begin) {
-        return subSequence(sequence, begin, sequence.length());
+    public static CharSequence subSequence(final CharSequence sequence, final int start) {
+        return subSequence(sequence, start, sequence.length());
     }
     // ---------------------------------------------------------------------------------------------------
     // ----- Sub sequence ----- end
 
-    // ----- Checking ----- begin
+    // ----- Checking ----- start
     // ---------------------------------------------------------------------------------------------------
     /**
      * <p>检查多个字符序列中是否存在 null。</p>
@@ -337,7 +337,7 @@ public class CharSequenceAide {
     // ---------------------------------------------------------------------------------------------------
     // ----- Checking ----- end
 
-    // ----- first/last non-null/non-empty/non-blank ----- begin
+    // ----- first/last non-null/non-empty/non-blank ----- start
     // ---------------------------------------------------------------------------------------------------
     /**
      * <p>从数组中获取第一个 non-null 的字符序列。</p>
@@ -496,7 +496,7 @@ public class CharSequenceAide {
     // ---------------------------------------------------------------------------------------------------
     // ----- first/last non-null/non-empty/non-blank ----- end
 
-    // ----- Equal ----- begin
+    // ----- Equal ----- start
     // ---------------------------------------------------------------------------------------------------
     /**
      * <p>比较两个字符序列的相等性。</p>
@@ -683,7 +683,7 @@ public class CharSequenceAide {
     // ---------------------------------------------------------------------------------------------------
     // ----- Equal ----- end
 
-    // ----- Index of ----- begin
+    // ----- Index of ----- start
     // ---------------------------------------------------------------------------------------------------
     /**
      * <p>查找指定字符 {@code searchChar} 在字符序列 {@code sequence} 从指定位置 {@code fromIndex} 之后首次出现的索引。
@@ -1411,7 +1411,7 @@ public class CharSequenceAide {
     // ---------------------------------------------------------------------------------------------------
     // ----- Index of ----- end
 
-    // ----- contains ----- begin
+    // ----- contains ----- start
     // ---------------------------------------------------------------------------------------------------
     /**
      * <p>检查字符序列中是否包含指定字符。</p>
@@ -1784,4 +1784,260 @@ public class CharSequenceAide {
     }
     // ---------------------------------------------------------------------------------------------------
     // ----- contains ----- end
+
+    // ----- startsWith ----- start
+    // ---------------------------------------------------------------------------------------------------
+    /**
+     * <p>检查 {@code sequence} 是否以 {@code prefix} 开头。</p>
+     *
+     * <pre>
+     * CharSequenceAide.startsWith(null, null)      = true
+     * CharSequenceAide.startsWith(null, "abc")     = false
+     * CharSequenceAide.startsWith("abcdef", null)  = false
+     * CharSequenceAide.startsWith("abcdef", "abc") = true
+     * CharSequenceAide.startsWith("ABCDEF", "abc") = false
+     * </pre>
+     *
+     * @param sequence 要检查的字符序列
+     * @param prefix 要查找的前缀
+     * @return 当 {@code sequence} 以 {@code prefix} 开头，或者两者都为 {@code null} 时返回 {@code true}
+     * @since 1.0.0
+     */
+    public static boolean startsWith(final CharSequence sequence, final CharSequence prefix) {
+        return startsWith(sequence, prefix, false);
+    }
+
+    /**
+     * <p>检查 {@code sequence} 是否以 {@code prefix} 开头，不区分大小写。</p>
+     *
+     * <pre>
+     * CharSequenceAide.startsWithIgnoreCase(null, null)      = true
+     * CharSequenceAide.startsWithIgnoreCase(null, "abc")     = false
+     * CharSequenceAide.startsWithIgnoreCase("abcdef", null)  = false
+     * CharSequenceAide.startsWithIgnoreCase("abcdef", "abc") = true
+     * CharSequenceAide.startsWithIgnoreCase("ABCDEF", "abc") = true
+     * </pre>
+     *
+     * @param sequence 要检查的字符序列
+     * @param prefix 要查找的前缀
+     * @return 当 {@code sequence} 以 {@code prefix} 开头，或者两者都为 {@code null} 时返回 {@code true}
+     * @since 1.0.0
+     */
+    public static boolean startsWithIgnoreCase(final CharSequence sequence, final CharSequence prefix) {
+        return startsWith(sequence, prefix, true);
+    }
+
+    /**
+     * <p>检查 {@code sequence} 是否以 {@code prefix} 开头。
+     * 可以指定是否区分大小写。</p>
+     *
+     * @param sequence 要检查的字符序列
+     * @param prefix 要查找的前缀
+     * @param ignoreCase 是否区分大小写
+     * @return 当 {@code sequence} 以 {@code prefix} 开头，或者两者都为 {@code null} 时返回 {@code true}
+     * @since 1.0.0
+     */
+    private static boolean startsWith(final CharSequence sequence, final CharSequence prefix, final boolean ignoreCase) {
+        if (sequence == null || prefix == null) {
+            return sequence == prefix;
+        }
+        if (prefix.length() > sequence.length()) {
+            return false;
+        }
+        return regionMatches(ignoreCase, sequence, 0, prefix, 0, prefix.length());
+    }
+
+    /**
+     * <p>检查 {@code sequence} 是否以 {@code prefixes} 中的任意一个元素开头。</p>
+     *
+     * <pre>
+     * CharSequenceAide.startsWithAny(null, null)      = false
+     * CharSequenceAide.startsWithAny(null, new String[] {"abc"})  = false
+     * CharSequenceAide.startsWithAny("abcxyz", null)     = false
+     * CharSequenceAide.startsWithAny("abcxyz", new String[] {""}) = true
+     * CharSequenceAide.startsWithAny("abcxyz", new String[] {"abc"}) = true
+     * CharSequenceAide.startsWithAny("abcxyz", new String[] {null, "xyz", "abc"}) = true
+     * CharSequenceAide.startsWithAny("abcxyz", null, "xyz", "ABCX") = false
+     * CharSequenceAide.startsWithAny("ABCXYZ", null, "xyz", "abc") = false
+     * </pre>
+     *
+     * @param sequence 要检查的字符序列
+     * @param prefixes 要查找的一组前缀
+     * @return 如果 {@code sequence} 以 {@code prefixes} 中的任意一个元素开头，则返回 {@code true}
+     * @since 1.0.0
+     */
+    public static boolean startsWithAny(final CharSequence sequence, final CharSequence... prefixes) {
+        if (isEmpty(sequence) || ArrayAide.isEmpty(prefixes)) {
+            return false;
+        }
+        for (CharSequence prefix : prefixes) {
+            if (startsWith(sequence, prefix)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * <p>检查 {@code sequence} 是否以 {@code prefixes} 中的任意一个元素开头，不区分大小写。</p>
+     *
+     * <pre>
+     * CharSequenceAide.startsWithAny(null, null)      = false
+     * CharSequenceAide.startsWithAny(null, new String[] {"abc"})  = false
+     * CharSequenceAide.startsWithAny("abcxyz", null)     = false
+     * CharSequenceAide.startsWithAny("abcxyz", new String[] {""}) = true
+     * CharSequenceAide.startsWithAny("abcxyz", new String[] {"abc"}) = true
+     * CharSequenceAide.startsWithAny("abcxyz", new String[] {null, "xyz", "abc"}) = true
+     * CharSequenceAide.startsWithAny("abcxyz", null, "xyz", "ABCX") = true
+     * CharSequenceAide.startsWithAny("ABCXYZ", null, "xyz", "abc") = true
+     * </pre>
+     *
+     * @param sequence 要检查的字符序列
+     * @param prefixes 要查找的一组前缀
+     * @return 如果 {@code sequence} 以 {@code prefixes} 中的任意一个元素开头，则返回 {@code true}
+     * @since 1.0.0
+     */
+    public static boolean startsWithAnyIgnoreCase(final CharSequence sequence, final CharSequence... prefixes) {
+        if (isEmpty(sequence) || ArrayAide.isEmpty(prefixes)) {
+            return false;
+        }
+        for (CharSequence prefix : prefixes) {
+            if (startsWithIgnoreCase(sequence, prefix)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    // ---------------------------------------------------------------------------------------------------
+    // ----- startsWith ----- end
+
+    // ----- endsWith ----- start
+    // ---------------------------------------------------------------------------------------------------
+    /**
+     * <p>检查 {@code sequence} 是否以 {@code suffix} 结尾。</p>
+     *
+     * <pre>
+     * CharSequenceAide.endsWith(null, null)      = true
+     * CharSequenceAide.endsWith(null, "def")     = false
+     * CharSequenceAide.endsWith("abcdef", null)  = false
+     * CharSequenceAide.endsWith("abcdef", "def") = true
+     * CharSequenceAide.endsWith("ABCDEF", "def") = false
+     * CharSequenceAide.endsWith("ABCDEF", "cde") = false
+     * CharSequenceAide.endsWith("ABCDEF", "")    = true
+     * </pre>
+     *
+     * @param sequence 要检查的字符序列
+     * @param suffix 要查找的后缀
+     * @return 当 {@code sequence} 以 {@code suffix} 结尾，或者两者都为 {@code null} 时返回 {@code true}
+     * @since 1.0.0
+     */
+    public static boolean endsWith(final CharSequence sequence, final CharSequence suffix) {
+        return endsWith(sequence, suffix, false);
+    }
+
+    /**
+     * <p>检查 {@code sequence} 是否以 {@code suffix} 结尾，不区分大小写。</p>
+     *
+     * <pre>
+     * CharSequenceAide.endsWithIgnoreCase(null, null)      = true
+     * CharSequenceAide.endsWithIgnoreCase(null, "def")     = false
+     * CharSequenceAide.endsWithIgnoreCase("abcdef", null)  = false
+     * CharSequenceAide.endsWithIgnoreCase("abcdef", "def") = true
+     * CharSequenceAide.endsWithIgnoreCase("ABCDEF", "def") = true
+     * CharSequenceAide.endsWithIgnoreCase("ABCDEF", "cde") = false
+     * </pre>
+     *
+     * @param sequence 要检查的字符序列
+     * @param suffix 要查找的后缀
+     * @return 当 {@code sequence} 以 {@code suffix} 结尾，或者两者都为 {@code null} 时返回 {@code true}
+     * @since 1.0.0
+     */
+    public static boolean endsWithIgnoreCase(final CharSequence sequence, final CharSequence suffix) {
+        return endsWith(sequence, suffix, true);
+    }
+
+    /**
+     * <p>检查 {@code sequence} 是否以 {@code prefix} 结尾。
+     * 可以指定是否区分大小写。</p>
+     *
+     * @param sequence 要检查的字符序列
+     * @param suffix 要查找的后缀
+     * @param ignoreCase 是否区分大小写
+     * @return 当 {@code sequence} 以 {@code suffix} 结尾，或者两者都为 {@code null} 时返回 {@code true}
+     * @since 1.0.0
+     */
+    private static boolean endsWith(final CharSequence sequence, final CharSequence suffix, final boolean ignoreCase) {
+        if (sequence == null || suffix == null) {
+            return sequence == suffix;
+        }
+        if (suffix.length() > sequence.length()) {
+            return false;
+        }
+        final int offset = sequence.length() - suffix.length();
+        return regionMatches(ignoreCase, sequence, offset, suffix, 0, suffix.length());
+    }
+
+    /**
+     * <p>检查 {@code sequence} 是否以 {@code suffixes} 中的任意一个元素结尾。</p>
+     *
+     * <pre>
+     * CharSequenceAide.endsWithAny(null, null)      = false
+     * CharSequenceAide.endsWithAny(null, new String[] {"abc"})  = false
+     * CharSequenceAide.endsWithAny("abcxyz", null)     = false
+     * CharSequenceAide.endsWithAny("abcxyz", new String[] {""}) = true
+     * CharSequenceAide.endsWithAny("abcxyz", new String[] {"xyz"}) = true
+     * CharSequenceAide.endsWithAny("abcxyz", new String[] {null, "xyz", "abc"}) = true
+     * CharSequenceAide.endsWithAny("abcXYZ", "def", "XYZ") = true
+     * CharSequenceAide.endsWithAny("abcXYZ", "def", "xyz") = false
+     * </pre>
+     *
+     * @param sequence 要检查的字符序列
+     * @param suffixes 要查找的一组后缀
+     * @return 如果 {@code sequence} 以 {@code suffixes} 中的任意一个元素结尾，则返回 {@code true}
+     * @since 1.0.0
+     */
+    public static boolean endsWithAny(final CharSequence sequence, final CharSequence... suffixes) {
+        if (isEmpty(sequence) || ArrayAide.isEmpty(suffixes)) {
+            return false;
+        }
+        for (CharSequence suffix : suffixes) {
+            if (endsWith(sequence, suffix)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * <p>检查 {@code sequence} 是否以 {@code suffixes} 中的任意一个元素结尾，不区分大小写。</p>
+     *
+     * <pre>
+     * CharSequenceAide.endsWithAny(null, null)      = false
+     * CharSequenceAide.endsWithAny(null, new String[] {"abc"})  = false
+     * CharSequenceAide.endsWithAny("abcxyz", null)     = false
+     * CharSequenceAide.endsWithAny("abcxyz", new String[] {""}) = true
+     * CharSequenceAide.endsWithAny("abcxyz", new String[] {"xyz"}) = true
+     * CharSequenceAide.endsWithAny("abcxyz", new String[] {null, "xyz", "abc"}) = true
+     * CharSequenceAide.endsWithAny("abcXYZ", "def", "XYZ") = true
+     * CharSequenceAide.endsWithAny("abcXYZ", "def", "xyz") = true
+     * </pre>
+     *
+     * @param sequence 要检查的字符序列
+     * @param suffixes 要查找的一组前缀
+     * @return 如果 {@code sequence} 以 {@code suffixes} 中的任意一个元素结尾，则返回 {@code true}
+     * @since 1.0.0
+     */
+    public static boolean endsWithAnyIgnoreCase(final CharSequence sequence, final CharSequence... suffixes) {
+        if (isEmpty(sequence) || ArrayAide.isEmpty(suffixes)) {
+            return false;
+        }
+        for (CharSequence suffix : suffixes) {
+            if (endsWithIgnoreCase(sequence, suffix)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    // ---------------------------------------------------------------------------------------------------
+    // ----- endsWith ----- end
 }
