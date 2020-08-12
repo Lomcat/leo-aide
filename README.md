@@ -4,10 +4,12 @@ Leo Aide
 
 
 
-`Caramel`
+**Caramel**
 
-/'kærəm(ə)l/ 
+`美音` /'kærəm(ə)l/
 
-焦糖；焦糖糖果；饴糖
+`英音` /'kærəmɛl/
 
-`Ca`refree F`rame`work `L`ibrary
+`译意` 焦糖；焦糖糖果；饴糖
+
+`释义` **Ca**refree F**rame**work **L**ibrary
