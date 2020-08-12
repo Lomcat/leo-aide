@@ -4,7 +4,9 @@ Leo Aide
 
 
 
-**Caramel**
+## 关于名称
+
+**Caramel** - Carefree Framework Library
 
 `美音` /'kærəm(ə)l/
 
@@ -12,4 +14,4 @@ Leo Aide
 
 `译意` 焦糖；焦糖糖果；饴糖
 
-`释义` **Ca**refree F**rame**work **L**ibrary
+`释义` `Ca`refree F`rame`work `L`ibrary
